@@ -6,6 +6,13 @@ function Button({ type }) {
       </button>
     );
   }
+  if (type === "submit") {
+    return (
+      <button className="flex justify-center items-center rounded-xl bg-green-700 py-2 px-6">
+        + Login
+      </button>
+    );
+  }
   if (type === "addTask") {
     return (
       <button className="flex justify-center items-center rounded-xl bg-cyan-600 py-2 px-6">

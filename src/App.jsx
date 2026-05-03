@@ -6,6 +6,8 @@ import BoardDetail from "./pages/BoardDetail";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Modal from "./components/ui/Modal";
+import ProtectedRoute from "./components/layout/ProtectedRoute";
+
 function App() {
   return (
     // ❌ این رو حذف کن: <BrowserRouter>
@@ -13,8 +15,10 @@ function App() {
       <Route path="/login" element={<Login />} />
 
       <Route element={<Layout />}>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/boards" element={<BoardDetail />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/boards/:id" element={<BoardDetail />} />
+        </Route>
         <Route path="/modal" element={<Modal />} />
         {/* <Route path="/calendar" element={<Calendar />} /> */}
         {/* <Route path="/settings" element={<Settings />} /> */}
