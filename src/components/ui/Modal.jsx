@@ -1,47 +1,54 @@
-// popup mishe
+import { useState } from "react";
 import Button from "../ui/Button";
-function Modal() {
+
+function Modal({ isOpen, onClose, onCreate }) {
+  const [name, setName] = useState("");
+  const [color, setColor] = useState("blue");
+
+  if (!isOpen) return null;
+
   return (
-    <form>
-      <div className="grid justify-start items-center">
-        <label className="mr-4 mb-2">Title :</label>
-        <input
-          className="w-64 bg-gray-200 text-black px-4 py-2 rounded-md mb-4 justify-end"
-          type="text"
-          placeholder=" Implement login page"
-        />
-        <label className="mr-4 mb-2">Description :</label>
-        <textarea
-          className="w-64 bg-gray-200 text-black px-4 py-2 rounded-md mb-4 justify-end"
-          type="text"
-          placeholder=" Implement login page"
-        />
-      </div>
-      <div className="flex gap-4  mb-4">
-        <dev className="flex flex-col">
-          <p className="mb-1">Status: </p>
-          <select className="px-2 py-4 border-black bg-blue-100 rounded-md">
-            <option>To Do</option>
-            <option>In Progress</option>
-            <option>Done </option>
-            <option>Blocked </option>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-96">
+        <h2 className="text-xl font-bold mb-4">Create New Board</h2>
+
+        <div className="mb-4">
+          <label className="block mb-2 font-medium">Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full border border-gray-300 rounded-md px-3 py-2"
+            placeholder="Board name"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block mb-2 font-medium">Color</label>
+          <select
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            className="w-full border border-gray-300 rounded-md px-3 py-2"
+          >
+            <option value="blue">Blue</option>
+            <option value="green">Green</option>
+            <option value="purple">Purple</option>
+            <option value="red">Red</option>
+            <option value="yellow">Yellow</option>
           </select>
-        </dev>
-        <dev className="flex flex-col">
-          <p className="mb-1"> Priority: </p>
-          <select className="px-2 py-4 border-black bg-blue-100 rounded-md">
-            <option>high </option>
-            <option>medium </option>
-            <option>low </option>
-            <option>critical</option>
-          </select>
-        </dev>
+        </div>
+
+        <div className="flex justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md"
+          >
+            Cancel
+          </button>
+          <Button onClick={() => onCreate({ name, color })}>Create</Button>
+        </div>
       </div>
-      <div className="flex items-center gap-4">
-        <Button type="addTask" />
-        <Button type="cancel" />
-      </div>
-    </form>
+    </div>
   );
 }
 

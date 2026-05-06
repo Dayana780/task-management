@@ -1,0 +1,30 @@
+{
+  "boards": [
+    {
+      "id": "1",
+      "name": "پروژه React",
+      "color": "blue"
+    },
+    {
+      "id": "2",
+      "name": "یادگیری Next.js",
+      "color": "green"
+    },
+    {
+      "id": "3",
+      "name": "بهبود مهارت CSS",
+      "color": "purple"
+    },
+    {
+      "name": "ooooooooo",
+      "color": "blue",
+      "id": "Ic1Va_yvN58"
+    },
+    {
+      "name": "pppppp",
+      "color": "red",
+      "id": "rKqvYitWEj8"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

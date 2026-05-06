@@ -1,32 +1,16 @@
-function Button({ type }) {
-  if (type === "create") {
-    return (
-      <button className="flex justify-center items-center rounded-xl bg-cyan-600 py-2 px-6">
-        + Create New Board
-      </button>
-    );
-  }
-  if (type === "submit") {
-    return (
-      <button className="flex justify-center items-center rounded-xl bg-green-700 py-2 px-6">
-        + Login
-      </button>
-    );
-  }
-  if (type === "addTask") {
-    return (
-      <button className="flex justify-center items-center rounded-xl bg-cyan-600 py-2 px-6">
-        + Add Task
-      </button>
-    );
-  }
-  if (type === "cancel") {
-    return (
-      <button className="flex justify-center items-center rounded-xl bg-red-600 py-2 px-6">
-        Cancel
-      </button>
-    );
-  }
+export default function Button({
+  children,
+  onClick,
+  type = "button",
+  className = "",
+}) {
+  return (
+    <button
+      type={type}
+      onClick={onClick}
+      className={`bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition ${className}`}
+    >
+      {children}
+    </button>
+  );
 }
-
-export default Button;

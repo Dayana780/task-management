@@ -1,13 +1,11 @@
-function BoardCard() {
+function BoardCard({ board }) {
   return (
-    <div className="mb-8 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-      <h2 className="text-lg font-semibold text-gray-700">Product </h2>
-
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-lg bg-blue-500  flex items-center justify-center text-white text-sm">
-            3 tasks
-          </div>
+    <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition">
+      <h3 className="text-lg font-semibold text-gray-800 mb-2">{board.name}</h3>
+      <div className="flex justify-between items-center">
+        <span className="text-sm text-gray-500">Board ID: {board.id}</span>
+        <div className="px-2 py-1 bg-blue-100 text-blue-600 rounded-md text-xs">
+          {board.color || "blue"}
         </div>
       </div>
     </div>
