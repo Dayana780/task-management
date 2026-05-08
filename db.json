@@ -16,14 +16,46 @@
       "color": "purple"
     },
     {
-      "name": "ooooooooo",
+      "name": "ظطط",
       "color": "blue",
-      "id": "Ic1Va_yvN58"
+      "id": "aLTQ_Ym5e9Y"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "1",
+      "title": "نصب React Router",
+      "description": "نصب و تنظیم Routing اولیه",
+      "status": "done",
+      "boardId": 1
     },
     {
-      "name": "pppppp",
-      "color": "red",
-      "id": "rKqvYitWEj8"
+      "id": "2",
+      "title": "ساخت کامپوننت Header",
+      "description": "طراحی هدر با Tailwind",
+      "status": "done",
+      "boardId": 1
+    },
+    {
+      "id": "3",
+      "title": "پیاده‌سازی لاگین",
+      "description": "فرم و اعتبارسنجی",
+      "status": "in-progress",
+      "boardId": 1
+    },
+    {
+      "title": "سسسسسسسسسس",
+      "description": "سی",
+      "status": "done",
+      "boardId": 1,
+      "id": "7G9RQc0bQJk"
+    },
+    {
+      "title": "ههه",
+      "description": "",
+      "status": "done",
+      "boardId": 1,
+      "id": "Q-t9-q0tGqc"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
