@@ -10,23 +10,24 @@ import ProtectedRoute from "./components/layout/ProtectedRoute";
 
 function App() {
   return (
-    // ❌ این رو حذف کن: <BrowserRouter>
-    <Routes>
-      <Route path="/login" element={<Login />} />
+    <>
+      <Routes>
+        <Route path="/" element={<Login />} />
 
-      <Route element={<Layout />}>
-        <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/boards/:id" element={<BoardDetail />} />
+        <Route element={<Layout />}>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/boards" element={<BoardDetail />} />
+            <Route path="/boards/:id" element={<BoardDetail />} />
+          </Route>
+          <Route path="/modal" element={<Modal />} />
+          {/* <Route path="/calendar" element={<Calendar />} /> */}
+          {/* <Route path="/settings" element={<Settings />} /> */}
         </Route>
-        <Route path="/modal" element={<Modal />} />
-        {/* <Route path="/calendar" element={<Calendar />} /> */}
-        {/* <Route path="/settings" element={<Settings />} /> */}
-      </Route>
 
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-    // ❌ این رو حذف کن: </BrowserRouter>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
 

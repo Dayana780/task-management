@@ -1,6 +1,12 @@
+import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import api from "../services/api";
+import {
+  fetchTasksByBoard,
+  createTask,
+  updateTaskStatus,
+  deleteTask,
+} from "../services/taskService";
 import Button from "../components/ui/Button";
 import AddTaskModal from "../components/ui/AddTaskModal";
 import TaskColumn from "../components/features/TaskColumn";
@@ -11,43 +17,62 @@ function BoardDetail() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // تغییر وضعیت تسک
   const handleStatusChange = async (taskId, newStatus) => {
+    toast.info("وضعیت در حال تغییر...");
     try {
-      await api.patch(`/tasks/${taskId}`, { status: newStatus });
+      await updateTaskStatus(taskId, newStatus);
       setTasks(
         tasks.map((task) =>
           task.id === taskId ? { ...task, status: newStatus } : task,
         ),
       );
+      toast.success("وضعیت تسک با موفقیت تغییر کرد");
     } catch (error) {
       console.error("Error updating status:", error);
-      alert("خطا در تغییر وضعیت");
-    }
-  };
-  // تابع اضافه کردن تسک جدید
-  const handleAddTask = async (newTask) => {
-    try {
-      const response = await api.post("/tasks", newTask);
-      setTasks([...tasks, response.data]);
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error("Error adding task:", error);
-      alert("خطا در اضافه کردن تسک");
+      toast.error("خطا در تغییر وضعیت");
     }
   };
 
-  // گرفتن داده‌ها از سرور
+  // حذف تسک
+  const handleDeleteTask = async (taskId) => {
+    try {
+      await deleteTask(taskId);
+      setTasks(tasks.filter((t) => t.id !== taskId));
+      toast.success("تسک با موفقیت حذف شد");
+    } catch (error) {
+      console.error(error);
+      toast.error("خطا در حذف تسک");
+    }
+  };
+
+  // اضافه کردن تسک جدید
+  const handleAddTask = async (newTask) => {
+    try {
+      const response = await createTask(newTask);
+      setTasks([...tasks, response]);
+      setIsModalOpen(false);
+      toast.success("تسک جدید اضافه شد");
+    } catch (error) {
+      console.error("Error adding task:", error);
+      toast.error("خطا در اضافه کردن تسک");
+    }
+  };
+
+  // گرفتن اطلاعات برد و تسک‌ها از سرور
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const boardResponse = await api.get(`/boards/${id}`);
-        setBoard(boardResponse.data);
+        const boardResponse = await fetch(`http://localhost:3001/boards/${id}`);
+        const boardData = await boardResponse.json();
+        setBoard(boardData);
 
-        const tasksResponse = await api.get(`/tasks?boardId=${id}`);
-        setTasks(tasksResponse.data);
+        const tasksData = await fetchTasksByBoard(id);
+        setTasks(tasksData);
       } catch (error) {
         console.error(error);
-        alert("Error fetching data: " + error.message);
+        toast.error("خطا در دریافت اطلاعات: " + error.message);
       } finally {
         setLoading(false);
       }
@@ -59,35 +84,35 @@ function BoardDetail() {
 
   return (
     <div className="p-6">
-      {/* هدر با دکمه Add Task */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">{board?.name}</h1>
         <Button onClick={() => setIsModalOpen(true)}>Add Task</Button>
       </div>
 
-      {/* سه ستون تسک‌ها */}
       <div className="grid grid-cols-3 gap-4">
         <TaskColumn
           title="📋 To Do"
           status="todo"
           tasks={tasks}
           onStatusChange={handleStatusChange}
+          onDelete={handleDeleteTask}
         />
         <TaskColumn
           title="⚡ In Progress"
           status="in-progress"
           tasks={tasks}
           onStatusChange={handleStatusChange}
+          onDelete={handleDeleteTask}
         />
         <TaskColumn
           title="✅ Done"
           status="done"
           tasks={tasks}
           onStatusChange={handleStatusChange}
+          onDelete={handleDeleteTask}
         />
       </div>
 
-      {/* مودال اضافه کردن تسک */}
       <AddTaskModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

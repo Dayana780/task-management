@@ -1,5 +1,6 @@
 import TaskCard from "./TaskCard";
-function TaskColumn({ title, status, tasks, onStatusChange }) {
+
+function TaskColumn({ title, status, tasks, onStatusChange, onDelete }) {
   const filteredTasks = tasks.filter((task) => task.status === status);
 
   return (
@@ -7,7 +8,12 @@ function TaskColumn({ title, status, tasks, onStatusChange }) {
       <h2 className="font-bold mb-3 text-center">{title}</h2>
       <div className="space-y-2">
         {filteredTasks.map((task) => (
-          <TaskCard key={task.id} task={task} onStatusChange={onStatusChange} />
+          <TaskCard
+            key={task.id}
+            task={task}
+            onStatusChange={onStatusChange}
+            onDelete={onDelete}
+          />
         ))}
         {filteredTasks.length === 0 && (
           <p className="text-gray-400 text-center py-4">No tasks</p>
@@ -16,4 +22,5 @@ function TaskColumn({ title, status, tasks, onStatusChange }) {
     </div>
   );
 }
+
 export default TaskColumn;

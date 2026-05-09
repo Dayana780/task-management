@@ -1,4 +1,10 @@
-function TaskCard({ task, onStatusChange }) {
+import Button from "../ui/Button";
+function TaskCard({ task, onStatusChange, onDelete }) {
+  function handleDelete() {
+    if (window.confirm("جذف بشه؟")) {
+      onDelete(task.id);
+    }
+  }
   return (
     <div className="bg-white p-3 rounded shadow">
       <h3 className="font-medium">{task.title}</h3>
@@ -14,6 +20,7 @@ function TaskCard({ task, onStatusChange }) {
       {task.description && (
         <p className="text-sm text-gray-500 mt-1">{task.description}</p>
       )}
+      <Button onClick={handleDelete}>Delete</Button>
     </div>
   );
 }

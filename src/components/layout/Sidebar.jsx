@@ -20,7 +20,7 @@ function Sidebar() {
         </li>
         <li>
           <Link
-            to="/"
+            to="/dashboard"
             className="p-2 hover:bg-gray-700 rounded flex items-center gap-2 w-full"
           >
             <Home size={18} /> Dashboard
