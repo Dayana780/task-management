@@ -1,3 +1,13 @@
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDroppable,
+} from "@dnd-kit/core";
+import {} from "@dnd-kit/sortable";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -13,14 +23,22 @@ import TaskColumn from "../components/features/TaskColumn";
 
 function BoardDetail() {
   const { id } = useParams();
+  console.log("🔍 id from useParams:", id);
+  console.log("🔍 full URL:", window.location.href);
   const [board, setBoard] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor),
+  );
+  console.log("sensors:", sensors);
+  // تغییر وضعیت تسک
   // تغییر وضعیت تسک
   const handleStatusChange = async (taskId, newStatus) => {
-    toast.info("وضعیت در حال تغییر...");
+    const toastId = toast.loading("وضعیت در حال تغییر...");
+
     try {
       await updateTaskStatus(taskId, newStatus);
       setTasks(
@@ -28,10 +46,10 @@ function BoardDetail() {
           task.id === taskId ? { ...task, status: newStatus } : task,
         ),
       );
-      toast.success("وضعیت تسک با موفقیت تغییر کرد");
+      toast.success("وضعیت تسک با موفقیت تغییر کرد", { id: toastId });
     } catch (error) {
       console.error("Error updating status:", error);
-      toast.error("خطا در تغییر وضعیت");
+      toast.error("خطا در تغییر وضعیت", { id: toastId });
     }
   };
 
@@ -46,7 +64,38 @@ function BoardDetail() {
       toast.error("خطا در حذف تسک");
     }
   };
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
 
+    console.log("active:", active);
+    console.log("over:", over);
+
+    if (!over) return;
+
+    const taskId = active.id;
+    const newStatus = over.id; // اینجا مستقیم از over.id استفاده میکنیم
+
+    console.log(`Task ${taskId} dropped on ${newStatus}`);
+
+    // چک کن newStatus معتبر هست یا نه
+    if (
+      newStatus !== "todo" &&
+      newStatus !== "in-progress" &&
+      newStatus !== "done"
+    ) {
+      console.log("❌ مقصد معتبر نیست:", newStatus);
+      return;
+    }
+
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task) return;
+
+    console.log(`Current: ${task.status}, New: ${newStatus}`);
+
+    if (task.status !== newStatus) {
+      await handleStatusChange(taskId, newStatus);
+    }
+  };
   // اضافه کردن تسک جدید
   const handleAddTask = async (newTask) => {
     try {
@@ -83,43 +132,52 @@ function BoardDetail() {
   if (loading) return <div className="text-center mt-20">Loading...</div>;
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{board?.name}</h1>
-        <Button onClick={() => setIsModalOpen(true)}>Add Task</Button>
-      </div>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">{board?.name}</h1>
+          <Button onClick={() => setIsModalOpen(true)}>Add Task</Button>
+        </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <TaskColumn
-          title="📋 To Do"
-          status="todo"
-          tasks={tasks}
-          onStatusChange={handleStatusChange}
-          onDelete={handleDeleteTask}
-        />
-        <TaskColumn
-          title="⚡ In Progress"
-          status="in-progress"
-          tasks={tasks}
-          onStatusChange={handleStatusChange}
-          onDelete={handleDeleteTask}
-        />
-        <TaskColumn
-          title="✅ Done"
-          status="done"
-          tasks={tasks}
-          onStatusChange={handleStatusChange}
-          onDelete={handleDeleteTask}
+        <div className="grid grid-cols-3 gap-4">
+          <TaskColumn
+            id="todo"
+            title="📋 To Do"
+            status="todo"
+            tasks={tasks}
+            onStatusChange={handleStatusChange}
+            onDelete={handleDeleteTask}
+          />
+          <TaskColumn
+            id="in-progress"
+            title="⚡ In Progress"
+            status="in-progress"
+            tasks={tasks}
+            onStatusChange={handleStatusChange}
+            onDelete={handleDeleteTask}
+          />
+          <TaskColumn
+            id="done"
+            title="✅ Done"
+            status="done"
+            tasks={tasks}
+            onStatusChange={handleStatusChange}
+            onDelete={handleDeleteTask}
+          />
+        </div>
+
+        <AddTaskModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onAdd={handleAddTask}
+          boardId={id}
         />
       </div>
-
-      <AddTaskModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onAdd={handleAddTask}
-        boardId={id}
-      />
-    </div>
+    </DndContext>
   );
 }
 

@@ -24,6 +24,11 @@
       "name": "cscsc",
       "color": "blue",
       "id": "T0Mw28Bfy-Q"
+    },
+    {
+      "name": "hhhh",
+      "color": "blue",
+      "id": "kMfFUTImpsc"
     }
   ],
   "tasks": [
@@ -31,36 +36,36 @@
       "id": "3",
       "title": "پیاده‌سازی لاگین",
       "description": "فرم و اعتبارسنجی",
-      "status": "in-progress",
+      "status": "todo",
       "boardId": 1
     },
     {
       "title": "سسسسسسسسسس",
       "description": "سی",
-      "status": "done",
+      "status": "in-progress",
       "boardId": 1,
       "id": "7G9RQc0bQJk"
     },
     {
       "title": "سلا",
       "description": "سبیذرلذ",
-      "status": "todo",
+      "status": "3",
       "boardId": 1,
       "id": "9tloZLE8igY"
     },
     {
-      "title": "غغغغغغغغغغغغغ",
-      "description": "غغغغغغغغغ",
-      "status": "todo",
-      "boardId": 1,
-      "id": "PiJIreCKWbo"
-    },
-    {
       "title": "الذذذذذذذذذذذ",
       "description": "اتاذ",
-      "status": "todo",
+      "status": "3",
       "boardId": 1,
       "id": "hWv4_KgAd3c"
+    },
+    {
+      "title": "ومخممممم",
+      "description": "نتمد",
+      "status": "done",
+      "boardId": 1,
+      "id": "WCOaHx-s750"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
