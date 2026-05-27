@@ -5,9 +5,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  useDroppable,
 } from "@dnd-kit/core";
-import {} from "@dnd-kit/sortable";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -23,6 +21,7 @@ import TaskColumn from "../components/features/TaskColumn";
 
 function BoardDetail() {
   const { id } = useParams();
+  console.log("🔍 id in BoardDetail:", id);
   console.log("🔍 id from useParams:", id);
   console.log("🔍 full URL:", window.location.href);
   const [board, setBoard] = useState(null);
@@ -34,7 +33,7 @@ function BoardDetail() {
     useSensor(KeyboardSensor),
   );
   console.log("sensors:", sensors);
-  // تغییر وضعیت تسک
+
   // تغییر وضعیت تسک
   const handleStatusChange = async (taskId, newStatus) => {
     const toastId = toast.loading("وضعیت در حال تغییر...");
@@ -64,6 +63,7 @@ function BoardDetail() {
       toast.error("خطا در حذف تسک");
     }
   };
+
   const handleDragEnd = async (event) => {
     const { active, over } = event;
 
@@ -73,11 +73,10 @@ function BoardDetail() {
     if (!over) return;
 
     const taskId = active.id;
-    const newStatus = over.id; // اینجا مستقیم از over.id استفاده میکنیم
+    const newStatus = over.id;
 
     console.log(`Task ${taskId} dropped on ${newStatus}`);
 
-    // چک کن newStatus معتبر هست یا نه
     if (
       newStatus !== "todo" &&
       newStatus !== "in-progress" &&
@@ -96,6 +95,7 @@ function BoardDetail() {
       await handleStatusChange(taskId, newStatus);
     }
   };
+
   // اضافه کردن تسک جدید
   const handleAddTask = async (newTask) => {
     try {

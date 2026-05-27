@@ -5,6 +5,8 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("todo");
+  const [priority, setPriority] = useState("medium");
+  const [dueDate, setDueDate] = useState("");
 
   if (!isOpen) return null;
 
@@ -16,11 +18,15 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
         description: description.trim(),
         status,
         boardId: parseInt(boardId),
+        priority,
+        dueDate,
       });
       // reset فرم
       setTitle("");
       setDescription("");
       setStatus("todo");
+      setPriority("medium");
+      setDueDate("");
     }
   };
 
@@ -70,6 +76,31 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
               <option value="in-progress">In Progress</option>
               <option value="done">Done</option>
             </select>
+          </div>
+
+          {/* فیلد اولویت */}
+          <div className="mb-4">
+            <label className="block mb-2 font-medium">اولویت</label>
+            <select
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
+            >
+              <option value="low">✅ کم</option>
+              <option value="medium">📌 متوسط</option>
+              <option value="high">🔥 بالا</option>
+            </select>
+          </div>
+
+          {/* فیلد تاریخ سررسید */}
+          <div className="mb-4">
+            <label className="block mb-2 font-medium">تاریخ سررسید</label>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
+            />
           </div>
 
           {/* دکمه‌ها */}
