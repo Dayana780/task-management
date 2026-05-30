@@ -74,7 +74,19 @@ function TaskCard({ task, onStatusChange, onDelete }) {
         return "text-gray-500";
     }
   }
-
+  const tagColors = {
+    study: "bg-purple-100 text-purple-800",
+    job: "bg-indigo-100 text-indigo-800",
+    feature: "bg-green-100 text-green-800",
+    bug: "bg-red-100 text-red-800",
+    documentation: "bg-blue-100 text-blue-800",
+    urgent: "bg-orange-100 text-orange-800",
+    react: "bg-cyan-100 text-cyan-800",
+    css: "bg-pink-100 text-pink-800",
+  };
+  function getTagColor(tag) {
+    return tagColors[tag] || "bg-gray-100 text-gray-800";
+  }
   return (
     <div
       ref={setNodeRef}
@@ -97,6 +109,20 @@ function TaskCard({ task, onStatusChange, onDelete }) {
           >
             📅 {dayjs(task.dueDate).format("YYYY/MM/DD")}
           </span>
+        )}
+      </div>
+      <div>
+        {task.tags && task.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-2">
+            {task.tags.map((tag) => (
+              <span
+                key={tag}
+                className={`text-xs px-2 py-0.5 rounded-full ${getTagColor(tag)}`}
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
         )}
       </div>
       <select

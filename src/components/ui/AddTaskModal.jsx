@@ -7,7 +7,7 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
   const [status, setStatus] = useState("todo");
   const [priority, setPriority] = useState("medium");
   const [dueDate, setDueDate] = useState("");
-
+  const [tags, setTags] = useState([]);
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
@@ -20,6 +20,7 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
         boardId: parseInt(boardId),
         priority,
         dueDate,
+        tags,
       });
       // reset فرم
       setTitle("");
@@ -91,7 +92,70 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
               <option value="high">🔥 بالا</option>
             </select>
           </div>
+          <div className="mb-4">
+            <label className="block mb-2 font-medium">تگ‌ها</label>
+            <div className="flex flex-wrap gap-3">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={tags.includes("study")}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setTags([...tags, "study"]);
+                    } else {
+                      setTags(tags.filter((t) => t !== "study"));
+                    }
+                  }}
+                />
+                study 📚
+              </label>
 
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={tags.includes("job")}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setTags([...tags, "job"]);
+                    } else {
+                      setTags(tags.filter((t) => t !== "job"));
+                    }
+                  }}
+                />
+                job 💼
+              </label>
+
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={tags.includes("feature")}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setTags([...tags, "feature"]);
+                    } else {
+                      setTags(tags.filter((t) => t !== "feature"));
+                    }
+                  }}
+                />
+                feature ✨
+              </label>
+
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={tags.includes("bug")}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setTags([...tags, "bug"]);
+                    } else {
+                      setTags(tags.filter((t) => t !== "bug"));
+                    }
+                  }}
+                />
+                bug 🐛
+              </label>
+            </div>
+          </div>
           {/* فیلد تاریخ سررسید */}
           <div className="mb-4">
             <label className="block mb-2 font-medium">تاریخ سررسید</label>

@@ -39,7 +39,8 @@
       "status": "todo",
       "boardId": 1,
       "priority": "medium",
-      "dueDate": "2025-06-01"
+      "dueDate": "2025-06-01",
+      "tags": []
     },
     {
       "id": "1",
@@ -48,7 +49,8 @@
       "status": "todo",
       "boardId": 1,
       "priority": "medium",
-      "dueDate": "2025-06-01"
+      "dueDate": "2025-06-01",
+      "tags": []
     },
     {
       "title": "یرلیری",
@@ -57,61 +59,62 @@
       "boardId": null,
       "priority": "medium",
       "dueDate": "2025-10-27",
-      "id": "IfXqQAIw4VA"
+      "id": "IfXqQAIw4VA",
+      "tags": []
     },
     {
-      "title": "ببببببببب",
+      "title": "uuuyu",
+      "description": "",
+      "status": "todo",
+      "boardId": null,
+      "priority": "low",
+      "dueDate": "2026-05-30",
+      "tags": [
+        "study",
+        "job"
+      ],
+      "id": "WVgQZ2wQrfU"
+    },
+    {
+      "title": "بلببببب",
       "description": "",
       "status": "todo",
       "boardId": null,
       "priority": "medium",
-      "dueDate": "2025-08-27",
-      "id": "uUeQ3gX99q4"
+      "dueDate": "2026-05-15",
+      "tags": [
+        "bug"
+      ],
+      "id": "4NtBJ2Fj49I"
     },
     {
-      "title": "تتتتتت",
-      "description": "",
-      "status": "todo",
-      "boardId": null,
-      "priority": "medium",
-      "dueDate": "2026-05-27",
-      "id": "eQUv1FvHuZE"
-    },
-    {
-      "title": "لللللل",
-      "description": "",
-      "status": "todo",
-      "boardId": null,
-      "priority": "high",
-      "dueDate": "2026-07-27",
-      "id": "_vHWd5GKvHg"
-    },
-    {
-      "title": ",m,mn",
-      "description": "",
-      "status": "done",
-      "boardId": null,
-      "priority": "medium",
-      "dueDate": "2026-05-28",
-      "id": "ITY3PM0hQwE"
-    },
-    {
-      "title": "لغلللللل",
-      "description": "",
-      "status": "todo",
-      "boardId": 2,
-      "priority": "medium",
-      "dueDate": "2026-05-28",
-      "id": "qY4k9_xdLBk"
-    },
-    {
-      "title": "اااااااااااااااااااااااااااااااااااااا",
+      "title": "ققققققققققق",
       "description": "",
       "status": "in-progress",
-      "boardId": 2,
+      "boardId": null,
+      "priority": "high",
+      "dueDate": "2026-05-08",
+      "tags": [
+        "bug",
+        "job",
+        "feature"
+      ],
+      "id": "QD8gzQnFiyQ"
+    },
+    {
+      "title": "صصصصصصص",
+      "description": "",
+      "status": "todo",
+      "boardId": null,
       "priority": "medium",
-      "dueDate": "2026-05-20",
-      "id": "PTYnXQALgF0"
+      "dueDate": "2026-05-30",
+      "tags": [
+        "bug",
+        "job",
+        "feature",
+        "study"
+      ],
+      "id": "EE-HKHwhtr8"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

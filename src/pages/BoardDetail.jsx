@@ -9,7 +9,7 @@ import {
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   fetchTasksByBoard,
   createTask,
@@ -22,22 +22,29 @@ import TaskColumn from "../components/features/TaskColumn";
 
 function BoardDetail() {
   const { id } = useParams();
-  // console.log("🔍 id in BoardDetail:", id);
-  // console.log("🔍 id from useParams:", id);
-  // console.log("🔍 full URL:", window.location.href);
+
+  // Stateها
   const [board, setBoard] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Stateهای فیلتر
   const [searchTerm, setSearchTerm] = useState("");
   const [filterPriority, setFilterPriority] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterDueDate, setFilterDueDate] = useState("all");
+  const [selectedTag, setSelectedTag] = useState("all");
+
+  // گرفتن لیست یکتای همه تگ‌ها (بعد از tasks تعریف شده)
+  const allTags = useMemo(() => {
+    return ["all", ...new Set(tasks.flatMap((task) => task.tags || []))];
+  }, [tasks]);
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor),
   );
-  // console.log("sensors:", sensors);
 
   // تغییر وضعیت تسک
   const handleStatusChange = async (taskId, newStatus) => {
@@ -69,32 +76,25 @@ function BoardDetail() {
     }
   };
 
+  // درگ و دراپ
   const handleDragEnd = async (event) => {
     const { active, over } = event;
-
-    console.log("active:", active);
-    console.log("over:", over);
 
     if (!over) return;
 
     const taskId = active.id;
     const newStatus = over.id;
 
-    console.log(`Task ${taskId} dropped on ${newStatus}`);
-
     if (
       newStatus !== "todo" &&
       newStatus !== "in-progress" &&
       newStatus !== "done"
     ) {
-      console.log("❌ مقصد معتبر نیست:", newStatus);
       return;
     }
 
     const task = tasks.find((t) => t.id === taskId);
     if (!task) return;
-
-    console.log(`Current: ${task.status}, New: ${newStatus}`);
 
     if (task.status !== newStatus) {
       await handleStatusChange(taskId, newStatus);
@@ -113,7 +113,8 @@ function BoardDetail() {
       toast.error("خطا در اضافه کردن تسک");
     }
   };
-  // فیلتر کردن تسک‌ها بر اساس جستجو و فیلترها
+
+  // فیلتر کردن تسک‌ها
   const filteredTasks = tasks.filter((task) => {
     // جستجو در عنوان و توضیحات
     const matchesSearch =
@@ -121,6 +122,10 @@ function BoardDetail() {
       task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (task.description &&
         task.description.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    // فیلتر تگ
+    const matchesTag =
+      selectedTag === "all" || (task.tags && task.tags.includes(selectedTag));
 
     // فیلتر اولویت
     const matchesPriority =
@@ -149,8 +154,15 @@ function BoardDetail() {
       }
     }
 
-    return matchesSearch && matchesPriority && matchesStatus && matchesDueDate;
+    return (
+      matchesSearch &&
+      matchesPriority &&
+      matchesStatus &&
+      matchesDueDate &&
+      matchesTag
+    );
   });
+
   // گرفتن اطلاعات برد و تسک‌ها از سرور
   useEffect(() => {
     const fetchData = async () => {
@@ -180,12 +192,15 @@ function BoardDetail() {
       onDragEnd={handleDragEnd}
     >
       <div className="p-6">
+        {/* هدر */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">{board?.name}</h1>
           <Button onClick={() => setIsModalOpen(true)}>Add Task</Button>
         </div>
+
+        {/* بخش فیلترها */}
         <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             {/* جستجو */}
             <input
               type="text"
@@ -219,6 +234,19 @@ function BoardDetail() {
               <option value="done">✅ Done</option>
             </select>
 
+            {/* فیلتر تگ */}
+            <select
+              value={selectedTag}
+              onChange={(e) => setSelectedTag(e.target.value)}
+              className="border rounded-md px-3 py-2"
+            >
+              {allTags.map((tag) => (
+                <option key={tag} value={tag}>
+                  {tag === "all" ? "🏷️ همه تگ‌ها" : `#${tag}`}
+                </option>
+              ))}
+            </select>
+
             {/* فیلتر تاریخ */}
             <select
               value={filterDueDate}
@@ -240,12 +268,15 @@ function BoardDetail() {
               setFilterPriority("all");
               setFilterStatus("all");
               setFilterDueDate("all");
+              setSelectedTag("all");
             }}
             className="mt-3 text-sm text-blue-600 hover:text-blue-800"
           >
             🗑️ پاک کردن همه فیلترها
           </button>
         </div>
+
+        {/* سه ستون تسک‌ها */}
         <div className="grid grid-cols-3 gap-4">
           <TaskColumn
             id="todo"
@@ -273,6 +304,7 @@ function BoardDetail() {
           />
         </div>
 
+        {/* مودال اضافه کردن تسک */}
         <AddTaskModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
