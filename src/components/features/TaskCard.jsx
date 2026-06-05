@@ -2,8 +2,8 @@ import { useSortable } from "@dnd-kit/sortable";
 import dayjs from "dayjs";
 import { CSS } from "@dnd-kit/utilities";
 import Button from "../ui/Button";
-
-function TaskCard({ task, onStatusChange, onDelete }) {
+import CommentSection from "./CommentSection";
+function TaskCard({ task, onStatusChange, onDelete, onAddComment }) {
   const {
     attributes,
     listeners,
@@ -24,8 +24,16 @@ function TaskCard({ task, onStatusChange, onDelete }) {
       onDelete(task.id);
     }
   }
+  const handleAddComment = async (commentText) => {
+    const newComment = {
+      id: Date.now().toString(),
+      text: commentText,
+      author: "کاربر",
+      createdAt: new Date().toISOString(),
+    };
+    onAddComment(task.id, newComment);
+  };
 
-  // ✅ اسم تابع رو اصلاح کردم: getPriorityColor (با i بعد از r و i دوم)
   function getPriorityColor(priority) {
     switch (priority) {
       case "high":
@@ -137,10 +145,14 @@ function TaskCard({ task, onStatusChange, onDelete }) {
       </select>
       {task.description && (
         <p className="text-sm text-gray-500 mt-1">{task.description}</p>
-      )}
+      )}{" "}
       <Button onClick={handleDelete} className="mt-2">
         Delete
       </Button>
+      <CommentSection
+        comments={task.comments || []}
+        onAddComment={handleAddComment}
+      />
     </div>
   );
 }

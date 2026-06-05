@@ -1,10 +1,4 @@
-import {
-  Home,
-  LayoutDashboard,
-  // CheckSquare,
-  // Calendar,
-  Settings,
-} from "lucide-react";
+import { Home, LayoutDashboard, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function Sidebar() {
@@ -34,22 +28,7 @@ function Sidebar() {
             <LayoutDashboard size={18} /> Boards
           </Link>
         </li>
-        {/* <li>
-          <Link
-            to="/tasks"
-            className="p-2 hover:bg-gray-700 rounded flex items-center gap-2 w-full"
-          >
-            <CheckSquare size={18} /> Tasks
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/calendar"
-            className="p-2 hover:bg-gray-700 rounded flex items-center gap-2 w-full"
-          >
-            <Calendar size={18} /> Calendar
-          </Link>
-        </li> */}
+
         <li>
           <Link
             to="/settings"

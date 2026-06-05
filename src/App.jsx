@@ -7,6 +7,8 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Modal from "./components/ui/Modal";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
+import ActivityPage from "./pages/ActivityPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -16,13 +18,13 @@ function App() {
 
         <Route element={<Layout />}>
           <Route element={<ProtectedRoute />}>
+            <Route path="/activities" element={<ActivityPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/boards" element={<BoardDetail />} />
             <Route path="/boards/:id" element={<BoardDetail />} />
           </Route>
           <Route path="/modal" element={<Modal />} />
-          {/* <Route path="/calendar" element={<Calendar />} /> */}
-          {/* <Route path="/settings" element={<Settings />} /> */}
         </Route>
 
         <Route path="*" element={<NotFound />} />

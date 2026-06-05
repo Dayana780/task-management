@@ -9,7 +9,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // دریافت لیست بردها
   useEffect(() => {
     const loadBoards = async () => {
       try {
@@ -24,7 +23,6 @@ export default function Dashboard() {
     loadBoards();
   }, []);
 
-  // ساخت برد جدید
   const handleCreateBoard = async (newBoard) => {
     try {
       await createBoard({

@@ -23,20 +23,44 @@ import TaskColumn from "../components/features/TaskColumn";
 function BoardDetail() {
   const { id } = useParams();
 
-  // Stateها
+  // State
   const [board, setBoard] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Stateهای فیلتر
+  // State filter
   const [searchTerm, setSearchTerm] = useState("");
   const [filterPriority, setFilterPriority] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterDueDate, setFilterDueDate] = useState("all");
   const [selectedTag, setSelectedTag] = useState("all");
 
-  // گرفتن لیست یکتای همه تگ‌ها (بعد از tasks تعریف شده)
+  const logActivity = async (taskId, taskTitle, action, details) => {
+    console.log("📝 Logging activity:", { taskId, taskTitle, action });
+    try {
+      const response = await fetch("http://localhost:3001/activities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          taskId: taskId || null,
+          taskTitle,
+          action,
+          details,
+          user: "کاربر",
+          createdAt: new Date().toISOString(),
+        }),
+      });
+
+      if (response.ok) {
+        console.log("✅ Activity logged successfully");
+      } else {
+        console.error("❌ Failed to log activity:", response.status);
+      }
+    } catch (error) {
+      console.error("❌ Error logging activity:", error);
+    }
+  };
   const allTags = useMemo(() => {
     return ["all", ...new Set(tasks.flatMap((task) => task.tags || []))];
   }, [tasks]);
@@ -46,11 +70,30 @@ function BoardDetail() {
     useSensor(KeyboardSensor),
   );
 
-  // تغییر وضعیت تسک
   const handleStatusChange = async (taskId, newStatus) => {
     const toastId = toast.loading("وضعیت در حال تغییر...");
 
     try {
+      const task = tasks.find((t) => t.id === taskId);
+      const oldStatusText =
+        task.status === "todo"
+          ? "To Do"
+          : task.status === "in-progress"
+            ? "In Progress"
+            : "Done";
+      const newStatusText =
+        newStatus === "todo"
+          ? "To Do"
+          : newStatus === "in-progress"
+            ? "In Progress"
+            : "Done";
+
+      await logActivity(
+        taskId,
+        task.title,
+        "status_change",
+        `وضعیت تسک '${task.title}' از ${oldStatusText} به ${newStatusText} تغییر کرد`,
+      );
       await updateTaskStatus(taskId, newStatus);
       setTasks(
         tasks.map((task) =>
@@ -64,10 +107,16 @@ function BoardDetail() {
     }
   };
 
-  // حذف تسک
   const handleDeleteTask = async (taskId) => {
     try {
       await deleteTask(taskId);
+      const task = tasks.find((t) => t.id === taskId);
+      await logActivity(
+        taskId,
+        task.title,
+        "delete",
+        `تسک '${task.title}' حذف شد`,
+      );
       setTasks(tasks.filter((t) => t.id !== taskId));
       toast.success("تسک با موفقیت حذف شد");
     } catch (error) {
@@ -75,8 +124,35 @@ function BoardDetail() {
       toast.error("خطا در حذف تسک");
     }
   };
+  const handleAddComment = async (taskId, newComment) => {
+    try {
+      const task = tasks.find((t) => t.id === taskId);
+      await logActivity(
+        taskId,
+        task.title,
+        "comment",
+        `نظر جدید روی تسک '${task.title}' اضافه شد`,
+      );
+      const updatedComments = [...(task.comments || []), newComment];
 
-  // درگ و دراپ
+      await fetch(`http://localhost:3001/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comments: updatedComments }),
+      });
+
+      setTasks(
+        tasks.map((t) =>
+          t.id === taskId ? { ...t, comments: updatedComments } : t,
+        ),
+      );
+
+      toast.success("نظر اضافه شد");
+    } catch (error) {
+      console.error(error);
+      toast.error("خطا در اضافه کردن نظر");
+    }
+  };
   const handleDragEnd = async (event) => {
     const { active, over } = event;
 
@@ -101,10 +177,15 @@ function BoardDetail() {
     }
   };
 
-  // اضافه کردن تسک جدید
   const handleAddTask = async (newTask) => {
     try {
       const response = await createTask(newTask);
+      await logActivity(
+        response.id,
+        response.title,
+        "create",
+        `تسک '${response.title}' ایجاد شد`,
+      );
       setTasks([...tasks, response]);
       setIsModalOpen(false);
       toast.success("تسک جدید اضافه شد");
@@ -114,28 +195,21 @@ function BoardDetail() {
     }
   };
 
-  // فیلتر کردن تسک‌ها
   const filteredTasks = tasks.filter((task) => {
-    // جستجو در عنوان و توضیحات
     const matchesSearch =
       searchTerm === "" ||
       task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (task.description &&
         task.description.toLowerCase().includes(searchTerm.toLowerCase()));
-
-    // فیلتر تگ
     const matchesTag =
       selectedTag === "all" || (task.tags && task.tags.includes(selectedTag));
 
-    // فیلتر اولویت
     const matchesPriority =
       filterPriority === "all" || task.priority === filterPriority;
 
-    // فیلتر وضعیت
     const matchesStatus =
       filterStatus === "all" || task.status === filterStatus;
 
-    // فیلتر تاریخ
     let matchesDueDate = true;
     if (filterDueDate !== "all") {
       if (filterDueDate === "no-date") {
@@ -163,7 +237,6 @@ function BoardDetail() {
     );
   });
 
-  // گرفتن اطلاعات برد و تسک‌ها از سرور
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -192,16 +265,13 @@ function BoardDetail() {
       onDragEnd={handleDragEnd}
     >
       <div className="p-6">
-        {/* هدر */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">{board?.name}</h1>
           <Button onClick={() => setIsModalOpen(true)}>Add Task</Button>
         </div>
 
-        {/* بخش فیلترها */}
         <div className="mb-6 p-4 bg-gray-50 rounded-lg">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {/* جستجو */}
             <input
               type="text"
               placeholder="🔍 جستجو در عنوان و توضیحات..."
@@ -210,7 +280,6 @@ function BoardDetail() {
               className="border rounded-md px-3 py-2"
             />
 
-            {/* فیلتر اولویت */}
             <select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value)}
@@ -222,7 +291,6 @@ function BoardDetail() {
               <option value="high">🔥 بالا</option>
             </select>
 
-            {/* فیلتر وضعیت */}
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
@@ -234,7 +302,6 @@ function BoardDetail() {
               <option value="done">✅ Done</option>
             </select>
 
-            {/* فیلتر تگ */}
             <select
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
@@ -247,7 +314,6 @@ function BoardDetail() {
               ))}
             </select>
 
-            {/* فیلتر تاریخ */}
             <select
               value={filterDueDate}
               onChange={(e) => setFilterDueDate(e.target.value)}
@@ -261,7 +327,6 @@ function BoardDetail() {
             </select>
           </div>
 
-          {/* دکمه ریست */}
           <button
             onClick={() => {
               setSearchTerm("");
@@ -276,7 +341,6 @@ function BoardDetail() {
           </button>
         </div>
 
-        {/* سه ستون تسک‌ها */}
         <div className="grid grid-cols-3 gap-4">
           <TaskColumn
             id="todo"
@@ -285,6 +349,7 @@ function BoardDetail() {
             tasks={filteredTasks}
             onStatusChange={handleStatusChange}
             onDelete={handleDeleteTask}
+            onAddComment={handleAddComment}
           />
           <TaskColumn
             id="in-progress"
@@ -293,6 +358,7 @@ function BoardDetail() {
             tasks={filteredTasks}
             onStatusChange={handleStatusChange}
             onDelete={handleDeleteTask}
+            onAddComment={handleAddComment}
           />
           <TaskColumn
             id="done"
@@ -301,10 +367,10 @@ function BoardDetail() {
             tasks={filteredTasks}
             onStatusChange={handleStatusChange}
             onDelete={handleDeleteTask}
+            onAddComment={handleAddComment}
           />
         </div>
 
-        {/* مودال اضافه کردن تسک */}
         <AddTaskModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

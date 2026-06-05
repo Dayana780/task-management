@@ -22,7 +22,7 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
         dueDate,
         tags,
       });
-      // reset فرم
+
       setTitle("");
       setDescription("");
       setStatus("todo");
@@ -37,7 +37,7 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
         <h2 className="text-xl font-bold mb-4">Add New Task</h2>
 
         <form onSubmit={handleSubmit}>
-          {/* فیلد عنوان */}
+          {/*  fild title */}
           <div className="mb-4">
             <label className="block mb-2 font-medium">Title *</label>
             <input
@@ -51,7 +51,7 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
             />
           </div>
 
-          {/* فیلد توضیحات */}
+          {/* fild detail  */}
           <div className="mb-4">
             <label className="block mb-2 font-medium">
               Description (optional)
@@ -65,32 +65,34 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
             />
           </div>
 
-          {/* فیلد وضعیت */}
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">Status</label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="todo">To Do</option>
-              <option value="in-progress">In Progress</option>
-              <option value="done">Done</option>
-            </select>
-          </div>
+          <div className="flex gap-4">
+            {/* fild status  */}
+            <div className="mb-4">
+              <label className="block mb-2 font-medium">Status</label>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="todo">To Do</option>
+                <option value="in-progress">In Progress</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
 
-          {/* فیلد اولویت */}
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">اولویت</label>
-            <select
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2"
-            >
-              <option value="low">✅ کم</option>
-              <option value="medium">📌 متوسط</option>
-              <option value="high">🔥 بالا</option>
-            </select>
+            {/*  fild priroty */}
+            <div className="mb-4">
+              <label className="block mb-2 font-medium">اولویت</label>
+              <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+              >
+                <option value="low">✅ کم</option>
+                <option value="medium">📌 متوسط</option>
+                <option value="high">🔥 بالا</option>
+              </select>
+            </div>
           </div>
           <div className="mb-4">
             <label className="block mb-2 font-medium">تگ‌ها</label>
@@ -156,7 +158,7 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
               </label>
             </div>
           </div>
-          {/* فیلد تاریخ سررسید */}
+          {/* fild duetime*/}
           <div className="mb-4">
             <label className="block mb-2 font-medium">تاریخ سررسید</label>
             <input
@@ -167,7 +169,6 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
             />
           </div>
 
-          {/* دکمه‌ها */}
           <div className="flex justify-end gap-3">
             <button
               type="button"

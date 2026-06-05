@@ -5,9 +5,9 @@ function Login() {
   const onSubmit = (data) => {
     if (data.Email === "test@gmail.com" && data.Password === "123456") {
       localStorage.setItem("token", "fake-token");
+      localStorage.setItem("userEmail", data.Email);
+      localStorage.setItem("userName", "کاربر");
       window.location.href = "/dashboard";
-    } else {
-      alert("EROOOOR");
     }
   };
 

@@ -14,108 +14,42 @@
       "id": "3",
       "name": "بهبود مهارت CSS",
       "color": "purple"
-    },
-    {
-      "name": "ظطط",
-      "color": "blue",
-      "id": "aLTQ_Ym5e9Y"
-    },
-    {
-      "name": "cscsc",
-      "color": "blue",
-      "id": "T0Mw28Bfy-Q"
-    },
-    {
-      "name": "hhhh",
-      "color": "blue",
-      "id": "kMfFUTImpsc"
     }
   ],
   "tasks": [
     {
       "id": "1",
       "title": "نمونه تسک",
-      "description": "توضیحات",
+      "description": "این یک تسک نمونه است",
       "status": "todo",
-      "boardId": 1,
+      "boardId": "1",
       "priority": "medium",
-      "dueDate": "2025-06-01",
-      "tags": []
+      "dueDate": "",
+      "tags": [],
+      "comments": []
     },
     {
-      "id": "1",
-      "title": "نمونه تسک",
-      "description": "توضیحات",
-      "status": "todo",
-      "boardId": 1,
-      "priority": "medium",
-      "dueDate": "2025-06-01",
-      "tags": []
-    },
-    {
-      "title": "یرلیری",
-      "description": "",
-      "status": "todo",
-      "boardId": null,
-      "priority": "medium",
-      "dueDate": "2025-10-27",
-      "id": "IfXqQAIw4VA",
-      "tags": []
-    },
-    {
-      "title": "uuuyu",
-      "description": "",
-      "status": "todo",
-      "boardId": null,
-      "priority": "low",
-      "dueDate": "2026-05-30",
-      "tags": [
-        "study",
-        "job"
-      ],
-      "id": "WVgQZ2wQrfU"
-    },
-    {
-      "title": "بلببببب",
-      "description": "",
-      "status": "todo",
-      "boardId": null,
-      "priority": "medium",
-      "dueDate": "2026-05-15",
-      "tags": [
-        "bug"
-      ],
-      "id": "4NtBJ2Fj49I"
-    },
-    {
-      "title": "ققققققققققق",
-      "description": "",
+      "id": "2",
+      "title": "پیاده‌سازی Drag & Drop",
+      "description": "اضافه کردن قابلیت کشیدن تسک‌ها بین ستون‌ها",
       "status": "in-progress",
-      "boardId": null,
+      "boardId": "1",
       "priority": "high",
-      "dueDate": "2026-05-08",
-      "tags": [
-        "bug",
-        "job",
-        "feature"
-      ],
-      "id": "QD8gzQnFiyQ"
+      "dueDate": "2026-06-10",
+      "tags": ["feature", "react"],
+      "comments": []
     },
     {
-      "title": "صصصصصصص",
-      "description": "",
+      "id": "3",
+      "title": "طراحی رابط کاربری",
+      "description": "بهبود استایل و ریسپانسیو کردن",
       "status": "todo",
-      "boardId": null,
+      "boardId": "1",
       "priority": "medium",
-      "dueDate": "2026-05-30",
-      "tags": [
-        "bug",
-        "job",
-        "feature",
-        "study"
-      ],
-      "id": "EE-HKHwhtr8"
+      "dueDate": "2026-06-15",
+      "tags": ["design"],
+      "comments": []
     }
   ],
-  "$schema": "./node_modules/json-server/schema.json"
+  "activities": []
 }
