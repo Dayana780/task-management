@@ -1,8 +1,10 @@
 import { useSortable } from "@dnd-kit/sortable";
 import dayjs from "dayjs";
 import { CSS } from "@dnd-kit/utilities";
+import { Trash2 } from "lucide-react";
 import Button from "../ui/Button";
 import CommentSection from "./CommentSection";
+
 function TaskCard({ task, onStatusChange, onDelete, onAddComment }) {
   const {
     attributes,
@@ -20,10 +22,11 @@ function TaskCard({ task, onStatusChange, onDelete, onAddComment }) {
   };
 
   function handleDelete() {
-    if (window.confirm("حذف بشه؟")) {
+    if (window.confirm("Delete this task?")) {
       onDelete(task.id);
     }
   }
+
   const handleAddComment = async (commentText) => {
     const newComment = {
       id: Date.now().toString(),
@@ -43,30 +46,28 @@ function TaskCard({ task, onStatusChange, onDelete, onAddComment }) {
       case "low":
         return "bg-green-100 text-green-800";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-zinc-100 text-zinc-800";
     }
   }
 
   function getPriorityText(priority) {
     switch (priority) {
       case "high":
-        return "🔥 بالا";
+        return "🔥 High";
       case "medium":
-        return "📌 متوسط";
+        return "📌 Medium";
       case "low":
-        return "✅ کم";
+        return "✅ Low";
       default:
-        return "❓ نامشخص";
+        return "❓ Unknown";
     }
   }
 
   function getDueDateStatus(dueDate) {
     if (!dueDate) return null;
-
     const today = dayjs().startOf("day");
     const due = dayjs(dueDate).startOf("day");
     const daysDiff = due.diff(today, "day");
-
     if (daysDiff < 0) return "past";
     if (daysDiff <= 2) return "soon";
     return "ok";
@@ -75,13 +76,14 @@ function TaskCard({ task, onStatusChange, onDelete, onAddComment }) {
   function getDueDateColor(status) {
     switch (status) {
       case "past":
-        return "text-red-600 font-bold";
+        return "text-red-600 font-semibold";
       case "soon":
         return "text-orange-600";
       default:
-        return "text-gray-500";
+        return "text-muted";
     }
   }
+
   const tagColors = {
     study: "bg-purple-100 text-purple-800",
     job: "bg-indigo-100 text-indigo-800",
@@ -92,21 +94,29 @@ function TaskCard({ task, onStatusChange, onDelete, onAddComment }) {
     react: "bg-cyan-100 text-cyan-800",
     css: "bg-pink-100 text-pink-800",
   };
+
   function getTagColor(tag) {
-    return tagColors[tag] || "bg-gray-100 text-gray-800";
+    return tagColors[tag] || "bg-zinc-100 text-zinc-800";
   }
+
   return (
     <div
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
-      className="bg-white p-3 rounded shadow cursor-grab active:cursor-grabbing"
+      className="cursor-grab rounded-xl border border-border bg-card p-3 shadow-sm transition hover:shadow-md active:cursor-grabbing sm:p-4"
     >
-      <h3 className="font-medium">{task.title}</h3>
-      <div className="flex justify-between items-center mt-2">
+      <h3 className="font-medium text-zinc-900">{task.title}</h3>
+
+      {task.description && (
+        <p className="mt-1 text-sm text-muted line-clamp-2">{task.description}</p>
+      )}
+
+      {/* Priority & due date row */}
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
         <span
-          className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(task.priority)}`}
+          className={`rounded-full px-2 py-0.5 text-xs font-medium ${getPriorityColor(task.priority)}`}
         >
           {getPriorityText(task.priority)}
         </span>
@@ -119,36 +129,42 @@ function TaskCard({ task, onStatusChange, onDelete, onAddComment }) {
           </span>
         )}
       </div>
-      <div>
-        {task.tags && task.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-2">
-            {task.tags.map((tag) => (
-              <span
-                key={tag}
-                className={`text-xs px-2 py-0.5 rounded-full ${getTagColor(tag)}`}
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+
+      {/* Tags */}
+      {task.tags && task.tags.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1">
+          {task.tags.map((tag) => (
+            <span
+              key={tag}
+              className={`rounded-full px-2 py-0.5 text-xs ${getTagColor(tag)}`}
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Status dropdown */}
       <select
         value={task.status}
         onChange={(e) => onStatusChange(task.id, e.target.value)}
-        className="mt-2 text-sm border rounded px-2 py-1 w-full"
+        className="mt-3 w-full rounded-lg border border-border px-2 py-1.5 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         onClick={(e) => e.stopPropagation()}
       >
         <option value="todo">📋 To Do</option>
         <option value="in-progress">⚡ In Progress</option>
         <option value="done">✅ Done</option>
       </select>
-      {task.description && (
-        <p className="text-sm text-gray-500 mt-1">{task.description}</p>
-      )}{" "}
-      <Button onClick={handleDelete} className="mt-2">
+
+      <Button
+        onClick={handleDelete}
+        variant="danger"
+        className="mt-2 flex w-full items-center justify-center gap-1 py-1.5 text-xs sm:text-sm"
+      >
+        <Trash2 size={14} />
         Delete
       </Button>
+
       <CommentSection
         comments={task.comments || []}
         onAddComment={handleAddComment}

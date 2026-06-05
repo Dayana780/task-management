@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Plus, LayoutGrid } from "lucide-react";
 import { fetchBoards, createBoard } from "../services/boardService";
 import BoardCard from "../components/BoardCard";
 import Button from "../components/ui/Button";
@@ -25,10 +26,7 @@ export default function Dashboard() {
 
   const handleCreateBoard = async (newBoard) => {
     try {
-      await createBoard({
-        name: newBoard.name,
-        color: newBoard.color,
-      });
+      await createBoard({ name: newBoard.name, color: newBoard.color });
       const updatedBoards = await fetchBoards();
       setBoards(updatedBoards);
       setIsModalOpen(false);
@@ -38,17 +36,32 @@ export default function Dashboard() {
     }
   };
 
+  // Loading spinner
   if (loading) {
-    return <div className="text-center mt-20">Loading...</div>;
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
   }
 
+  // Empty state
   if (boards.length === 0) {
     return (
-      <div className="text-center py-20">
-        <p className="text-gray-500 mb-4">
-          No boards yet. Create your first board to start
+      <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-primary">
+          <LayoutGrid size={32} />
+        </div>
+        <h2 className="text-xl font-semibold text-zinc-800">No boards yet</h2>
+        <p className="mt-2 max-w-sm text-sm text-muted">
+          Create your first board to start organizing tasks
         </p>
-        <Button onClick={() => setIsModalOpen(true)}>Create Board</Button>
+        <Button onClick={() => setIsModalOpen(true)} className="mt-6">
+          <span className="flex items-center gap-2">
+            <Plus size={18} />
+            Create Board
+          </span>
+        </Button>
 
         <Modal
           isOpen={isModalOpen}
@@ -60,13 +73,23 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">My Boards</h1>
-        <Button onClick={() => setIsModalOpen(true)}>Create Board</Button>
+    <div>
+      {/* Page header */}
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-zinc-900">My Boards</h1>
+          <p className="mt-1 text-sm text-muted">{boards.length} board(s)</p>
+        </div>
+        <Button onClick={() => setIsModalOpen(true)}>
+          <span className="flex items-center gap-2">
+            <Plus size={18} />
+            Create Board
+          </span>
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Board grid — 1 col mobile, 2 tablet, 3 desktop */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {boards.map((board) => (
           <BoardCard key={board.id} board={board} />
         ))}

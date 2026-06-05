@@ -24,9 +24,9 @@ function ActivityLog({ activities }) {
   const getActionColor = (action) => {
     switch (action) {
       case "create":
-        return "text-green-600";
+        return "text-success";
       case "status_change":
-        return "text-blue-600";
+        return "text-primary";
       case "priority_change":
         return "text-purple-600";
       case "comment":
@@ -34,14 +34,31 @@ function ActivityLog({ activities }) {
       case "delete":
         return "text-red-600";
       default:
-        return "text-gray-600";
+        return "text-muted";
+    }
+  };
+
+  const getActionLabel = (action) => {
+    switch (action) {
+      case "create":
+        return "Created";
+      case "status_change":
+        return "Status changed";
+      case "priority_change":
+        return "Priority changed";
+      case "comment":
+        return "Comment";
+      case "delete":
+        return "Deleted";
+      default:
+        return "Activity";
     }
   };
 
   if (!activities || activities.length === 0) {
     return (
-      <div className="text-center py-20 text-gray-400">
-        📭 هنوز فعالیتی ثبت نشده است
+      <div className="rounded-xl border border-dashed border-border py-16 text-center text-muted">
+        📭 No activity recorded yet
       </div>
     );
   }
@@ -51,24 +68,26 @@ function ActivityLog({ activities }) {
       {activities.map((activity) => (
         <div
           key={activity.id}
-          className="bg-white rounded-lg p-3 shadow-sm border-l-4 border-blue-400"
+          className="rounded-xl border border-border bg-card p-4 shadow-sm transition hover:shadow-md"
         >
-          <div className="flex items-start gap-2">
-            <span className="text-xl">{getActionIcon(activity.action)}</span>
-            <div className="flex-1">
-              <p className="text-gray-800">
-                <span className="font-medium">{activity.user || "کاربر"}</span>
-                {" " + activity.details}
+          <div className="flex items-start gap-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-zinc-50 text-lg">
+              {getActionIcon(activity.action)}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm text-zinc-800 sm:text-base">
+                <span className="font-semibold">
+                  {activity.user || "کاربر"}
+                </span>{" "}
+                {activity.details}
               </p>
-              <div className="flex justify-between items-center mt-1">
-                <span className={`text-xs ${getActionColor(activity.action)}`}>
-                  {activity.action === "create" && "ایجاد"}
-                  {activity.action === "status_change" && "تغییر وضعیت"}
-                  {activity.action === "priority_change" && "تغییر اولویت"}
-                  {activity.action === "comment" && "نظر"}
-                  {activity.action === "delete" && "حذف"}
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+                <span
+                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${getActionColor(activity.action)} bg-zinc-50`}
+                >
+                  {getActionLabel(activity.action)}
                 </span>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-muted">
                   {dayjs(activity.createdAt).fromNow()}
                 </span>
               </div>

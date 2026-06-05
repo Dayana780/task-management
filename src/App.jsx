@@ -1,5 +1,5 @@
-// src/App.jsx
-import { Routes, Route } from "react-router-dom"; // ← دیگه BrowserRouter رو import نکن!
+// Main app routes
+import { Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import BoardDetail from "./pages/BoardDetail";
@@ -12,24 +12,25 @@ import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Login />} />
+    <Routes>
+      {/* Public route */}
+      <Route path="/" element={<Login />} />
 
-        <Route element={<Layout />}>
-          <Route element={<ProtectedRoute />}>
-            <Route path="/activities" element={<ActivityPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/boards" element={<BoardDetail />} />
-            <Route path="/boards/:id" element={<BoardDetail />} />
-          </Route>
-          <Route path="/modal" element={<Modal />} />
+      {/* Protected routes with layout */}
+      <Route element={<Layout />}>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/activities" element={<ActivityPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/boards" element={<BoardDetail />} />
+          <Route path="/boards/:id" element={<BoardDetail />} />
         </Route>
+        <Route path="/modal" element={<Modal />} />
+      </Route>
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </>
+      {/* 404 fallback */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 

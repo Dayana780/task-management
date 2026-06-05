@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { X } from "lucide-react";
 import Button from "./Button";
 
 export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
@@ -8,7 +9,11 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
   const [priority, setPriority] = useState("medium");
   const [dueDate, setDueDate] = useState("");
   const [tags, setTags] = useState([]);
+
   if (!isOpen) return null;
+
+  const inputClass =
+    "w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,51 +33,73 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
       setStatus("todo");
       setPriority("medium");
       setDueDate("");
+      setTags([]);
     }
   };
 
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-96">
-        <h2 className="text-xl font-bold mb-4">Add New Task</h2>
+  const toggleTag = (tag) => {
+    setTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
+    );
+  };
 
-        <form onSubmit={handleSubmit}>
-          {/*  fild title */}
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">Title *</label>
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center">
+      <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-card p-6 shadow-xl">
+        {/* Modal header */}
+        <div className="mb-5 flex items-center justify-between">
+          <h2 className="text-xl font-bold text-zinc-900">Add New Task</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-lg p-1 text-muted hover:bg-zinc-100"
+            aria-label="Close"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Title field */}
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+              Title *
+            </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={inputClass}
               placeholder="Enter task title"
               autoFocus
               required
             />
           </div>
 
-          {/* fild detail  */}
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">
+          {/* Description field */}
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-zinc-700">
               Description (optional)
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={inputClass}
               placeholder="Enter task description"
               rows="3"
             />
           </div>
 
-          <div className="flex gap-4">
-            {/* fild status  */}
-            <div className="mb-4">
-              <label className="block mb-2 font-medium">Status</label>
+          {/* Status & priority — side by side on sm+ */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+                Status
+              </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={inputClass}
               >
                 <option value="todo">To Do</option>
                 <option value="in-progress">In Progress</option>
@@ -80,100 +107,72 @@ export default function AddTaskModal({ isOpen, onClose, onAdd, boardId }) {
               </select>
             </div>
 
-            {/*  fild priroty */}
-            <div className="mb-4">
-              <label className="block mb-2 font-medium">اولویت</label>
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+                Priority
+              </label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                className={inputClass}
               >
-                <option value="low">✅ کم</option>
-                <option value="medium">📌 متوسط</option>
-                <option value="high">🔥 بالا</option>
+                <option value="low">✅ Low</option>
+                <option value="medium">📌 Medium</option>
+                <option value="high">🔥 High</option>
               </select>
             </div>
           </div>
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">تگ‌ها</label>
-            <div className="flex flex-wrap gap-3">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={tags.includes("study")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setTags([...tags, "study"]);
-                    } else {
-                      setTags(tags.filter((t) => t !== "study"));
-                    }
-                  }}
-                />
-                study 📚
-              </label>
 
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={tags.includes("job")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setTags([...tags, "job"]);
-                    } else {
-                      setTags(tags.filter((t) => t !== "job"));
-                    }
-                  }}
-                />
-                job 💼
-              </label>
-
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={tags.includes("feature")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setTags([...tags, "feature"]);
-                    } else {
-                      setTags(tags.filter((t) => t !== "feature"));
-                    }
-                  }}
-                />
-                feature ✨
-              </label>
-
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={tags.includes("bug")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setTags([...tags, "bug"]);
-                    } else {
-                      setTags(tags.filter((t) => t !== "bug"));
-                    }
-                  }}
-                />
-                bug 🐛
-              </label>
+          {/* Tags */}
+          <div>
+            <label className="mb-2 block text-sm font-medium text-zinc-700">
+              Tags
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { id: "study", label: "study 📚" },
+                { id: "job", label: "job 💼" },
+                { id: "feature", label: "feature ✨" },
+                { id: "bug", label: "bug 🐛" },
+              ].map(({ id, label }) => (
+                <label
+                  key={id}
+                  className={`cursor-pointer rounded-full border px-3 py-1 text-xs transition ${
+                    tags.includes(id)
+                      ? "border-primary bg-blue-50 text-primary"
+                      : "border-border bg-zinc-50 text-zinc-600 hover:border-primary/50"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={tags.includes(id)}
+                    onChange={() => toggleTag(id)}
+                    className="sr-only"
+                  />
+                  {label}
+                </label>
+              ))}
             </div>
           </div>
-          {/* fild duetime*/}
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">تاریخ سررسید</label>
+
+          {/* Due date */}
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+              Due date
+            </label>
             <input
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2"
+              className={inputClass}
             />
           </div>
 
-          <div className="flex justify-end gap-3">
+          <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end sm:gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md transition"
+              className="rounded-lg px-4 py-2 text-sm text-zinc-600 transition hover:bg-zinc-100"
             >
               Cancel
             </button>

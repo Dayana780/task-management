@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { User, Pencil } from "lucide-react";
+import Button from "../components/ui/Button";
 
 function ProfilePage() {
   const [user, setUser] = useState({ email: "", name: "" });
@@ -6,6 +8,7 @@ function ProfilePage() {
   const [stats, setStats] = useState({ boards: 0, tasks: 0, comments: 0 });
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState("");
+
   const handleEditName = () => {
     setEditName(user.name);
     setIsEditing(true);
@@ -18,12 +21,12 @@ function ProfilePage() {
       setIsEditing(false);
     }
   };
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
     const email = localStorage.getItem("userEmail") || "test@gmail.com";
     const name = localStorage.getItem("userName") || "کاربر";
-
     setUser({ email, name });
+
     const fetchStats = async () => {
       try {
         const [boardsRes, tasksRes] = await Promise.all([
@@ -48,82 +51,94 @@ function ProfilePage() {
         console.error("Error fetching stats:", error);
       }
     };
+
     fetchStats();
     setLoading(false);
   }, []);
 
   if (loading) {
-    return <div className="text-center mt-20">Loading...</div>;
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
   }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">👤 پروفایل کاربر</h1>
+    <div className="mx-auto max-w-2xl">
+      <div className="mb-6 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-primary">
+          <User size={20} />
+        </div>
+        <h1 className="text-xl font-bold text-zinc-900 sm:text-2xl">
+          User Profile
+        </h1>
+      </div>
 
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+        {/* Avatar & name section */}
+        <div className="flex flex-col items-center gap-4 border-b border-border pb-6 sm:flex-row sm:items-start">
+          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-primary text-2xl font-bold text-white">
             {user.name.charAt(0).toUpperCase()}
           </div>
-          <div>
+
+          <div className="flex-1 text-center sm:text-left">
             {isEditing ? (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                 <input
                   type="text"
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="border rounded px-2 py-1 text-lg"
+                  className="rounded-lg border border-border px-3 py-2 text-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   autoFocus
                 />
-                <button
-                  onClick={handleSaveName}
-                  className="bg-green-500 text-white px-3 py-1 rounded text-sm"
-                >
-                  ذخیره
-                </button>
-                <button
-                  onClick={() => setIsEditing(false)}
-                  className="bg-gray-500 text-white px-3 py-1 rounded text-sm"
-                >
-                  انصراف
-                </button>
+                <div className="flex justify-center gap-2 sm:justify-start">
+                  <Button onClick={handleSaveName} className="py-1.5 text-sm">
+                    Save
+                  </Button>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="rounded-lg px-3 py-1.5 text-sm text-muted hover:bg-zinc-100"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl font-semibold">{user.name}</h2>
+              <div className="flex flex-col items-center gap-1 sm:flex-row sm:items-center sm:gap-2">
+                <h2 className="text-xl font-semibold text-zinc-900">
+                  {user.name}
+                </h2>
                 <button
+                  type="button"
                   onClick={handleEditName}
-                  className="text-blue-500 text-sm hover:underline"
+                  className="flex items-center gap-1 text-sm text-primary hover:underline"
                 >
-                  ✏️ ویرایش
+                  <Pencil size={14} />
+                  Edit
                 </button>
               </div>
             )}
-            <p className="text-gray-500">{user.email}</p>
+            <p className="mt-1 text-sm text-muted">{user.email}</p>
           </div>
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">
-                {stats.boards}
-              </div>
-              <div className="text-sm text-gray-500">بردها</div>
-            </div>
-            <div className="bg-green-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">
-                {stats.tasks}
-              </div>
-              <div className="text-sm text-gray-500">تسک‌ها</div>
-            </div>
-            <div className="bg-orange-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-orange-600">
-                {stats.comments}
-              </div>
-              <div className="text-sm text-gray-500">کامنت‌ها</div>
-            </div>
+        </div>
+
+        {/* Stats grid */}
+        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="rounded-xl bg-blue-50 p-4 text-center">
+            <div className="text-2xl font-bold text-primary">{stats.boards}</div>
+            <div className="text-sm text-muted">Boards</div>
           </div>
-          <div>
-            <h2 className="text-xl font-semibold">{user.name}</h2>
-            <p className="text-gray-500">{user.email}</p>
+          <div className="rounded-xl bg-green-50 p-4 text-center">
+            <div className="text-2xl font-bold text-success">{stats.tasks}</div>
+            <div className="text-sm text-muted">Tasks</div>
+          </div>
+          <div className="rounded-xl bg-orange-50 p-4 text-center">
+            <div className="text-2xl font-bold text-orange-600">
+              {stats.comments}
+            </div>
+            <div className="text-sm text-muted">Comments</div>
           </div>
         </div>
       </div>

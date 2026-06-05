@@ -195,6 +195,7 @@ function BoardDetail() {
     }
   };
 
+  // Filter tasks by search, priority, status, tag, due date
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch =
       searchTerm === "" ||
@@ -256,7 +257,16 @@ function BoardDetail() {
     fetchData();
   }, [id]);
 
-  if (loading) return <div className="text-center mt-20">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
+  const inputClass =
+    "w-full rounded-lg border border-border bg-card px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
 
   return (
     <DndContext
@@ -264,39 +274,43 @@ function BoardDetail() {
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
     >
-      <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">{board?.name}</h1>
+      <div>
+        {/* Board header */}
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-xl font-bold text-zinc-900 sm:text-2xl">
+            {board?.name}
+          </h1>
           <Button onClick={() => setIsModalOpen(true)}>Add Task</Button>
         </div>
 
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        {/* Filter bar */}
+        <div className="mb-6 rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             <input
               type="text"
-              placeholder="🔍 جستجو در عنوان و توضیحات..."
+              placeholder="🔍 Search title & description..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="border rounded-md px-3 py-2"
+              className={inputClass}
             />
 
             <select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value)}
-              className="border rounded-md px-3 py-2"
+              className={inputClass}
             >
-              <option value="all">همه اولویت‌ها</option>
-              <option value="low">✅ کم</option>
-              <option value="medium">📌 متوسط</option>
-              <option value="high">🔥 بالا</option>
+              <option value="all">All priorities</option>
+              <option value="low">✅ Low</option>
+              <option value="medium">📌 Medium</option>
+              <option value="high">🔥 High</option>
             </select>
 
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="border rounded-md px-3 py-2"
+              className={inputClass}
             >
-              <option value="all">همه وضعیت‌ها</option>
+              <option value="all">All statuses</option>
               <option value="todo">📋 To Do</option>
               <option value="in-progress">⚡ In Progress</option>
               <option value="done">✅ Done</option>
@@ -305,11 +319,11 @@ function BoardDetail() {
             <select
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
-              className="border rounded-md px-3 py-2"
+              className={inputClass}
             >
               {allTags.map((tag) => (
                 <option key={tag} value={tag}>
-                  {tag === "all" ? "🏷️ همه تگ‌ها" : `#${tag}`}
+                  {tag === "all" ? "🏷️ All tags" : `#${tag}`}
                 </option>
               ))}
             </select>
@@ -317,17 +331,18 @@ function BoardDetail() {
             <select
               value={filterDueDate}
               onChange={(e) => setFilterDueDate(e.target.value)}
-              className="border rounded-md px-3 py-2"
+              className={inputClass}
             >
-              <option value="all">همه تاریخ‌ها</option>
-              <option value="today">📅 امروز</option>
-              <option value="week">📅 این هفته</option>
-              <option value="overdue">⚠️ تاریخ گذشته</option>
-              <option value="no-date">بدون تاریخ</option>
+              <option value="all">All dates</option>
+              <option value="today">📅 Today</option>
+              <option value="week">📅 This week</option>
+              <option value="overdue">⚠️ Overdue</option>
+              <option value="no-date">No date</option>
             </select>
           </div>
 
           <button
+            type="button"
             onClick={() => {
               setSearchTerm("");
               setFilterPriority("all");
@@ -335,13 +350,14 @@ function BoardDetail() {
               setFilterDueDate("all");
               setSelectedTag("all");
             }}
-            className="mt-3 text-sm text-blue-600 hover:text-blue-800"
+            className="mt-3 text-sm text-primary transition hover:text-blue-800"
           >
-            🗑️ پاک کردن همه فیلترها
+            🗑️ Clear all filters
           </button>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        {/* Kanban columns — stack on mobile, 3 cols on desktop */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           <TaskColumn
             id="todo"
             title="📋 To Do"

@@ -14,19 +14,34 @@ function TaskColumn({
   onDelete,
   onAddComment,
 }) {
-  const { setNodeRef } = useDroppable({ id });
+  const { setNodeRef, isOver } = useDroppable({ id });
   const filteredTasks = tasks.filter((task) => task.status === status);
   const taskIds = filteredTasks.map((task) => task.id);
+
+  // Column header colors per status
+  const headerColors = {
+    todo: "border-t-blue-500 bg-blue-50/50",
+    "in-progress": "border-t-orange-500 bg-orange-50/50",
+    done: "border-t-green-500 bg-green-50/50",
+  };
 
   return (
     <div
       ref={setNodeRef}
-      className="bg-gray-100 rounded-lg p-4"
       data-column-id={id}
+      className={`min-h-[200px] rounded-xl border border-border border-t-4 p-3 transition sm:p-4 ${headerColors[status]} ${
+        isOver ? "ring-2 ring-primary/30" : ""
+      }`}
     >
-      <h2 className="font-bold mb-3 text-center">{title}</h2>
+      <h2 className="mb-3 text-center text-sm font-bold text-zinc-700 sm:text-base">
+        {title}
+        <span className="ml-2 rounded-full bg-white px-2 py-0.5 text-xs font-normal text-muted">
+          {filteredTasks.length}
+        </span>
+      </h2>
+
       <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {filteredTasks.map((task) => (
             <TaskCard
               key={task.id}
@@ -37,7 +52,7 @@ function TaskColumn({
             />
           ))}
           {filteredTasks.length === 0 && (
-            <p className="text-gray-400 text-center py-4">No tasks</p>
+            <p className="py-8 text-center text-sm text-muted">No tasks</p>
           )}
         </div>
       </SortableContext>
