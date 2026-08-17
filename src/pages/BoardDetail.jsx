@@ -47,7 +47,7 @@ function BoardDetail() {
           taskTitle,
           action,
           details,
-          user: "کاربر",
+          user: "User",
           createdAt: new Date().toISOString(),
         }),
       });
@@ -61,17 +61,20 @@ function BoardDetail() {
       console.error("❌ Error logging activity:", error);
     }
   };
+
   const allTags = useMemo(() => {
     return ["all", ...new Set(tasks.flatMap((task) => task.tags || []))];
   }, [tasks]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 },
+    }),
     useSensor(KeyboardSensor),
   );
 
   const handleStatusChange = async (taskId, newStatus) => {
-    const toastId = toast.loading("وضعیت در حال تغییر...");
+    const toastId = toast.loading("Changing status...");
 
     try {
       const task = tasks.find((t) => t.id === taskId);
@@ -92,7 +95,7 @@ function BoardDetail() {
         taskId,
         task.title,
         "status_change",
-        `وضعیت تسک '${task.title}' از ${oldStatusText} به ${newStatusText} تغییر کرد`,
+        `Task '${task.title}' status changed from ${oldStatusText} to ${newStatusText}`,
       );
       await updateTaskStatus(taskId, newStatus);
       setTasks(
@@ -100,10 +103,10 @@ function BoardDetail() {
           task.id === taskId ? { ...task, status: newStatus } : task,
         ),
       );
-      toast.success("وضعیت تسک با موفقیت تغییر کرد", { id: toastId });
+      toast.success("Task status changed successfully", { id: toastId });
     } catch (error) {
       console.error("Error updating status:", error);
-      toast.error("خطا در تغییر وضعیت", { id: toastId });
+      toast.error("Error changing task status", { id: toastId });
     }
   };
 
@@ -115,24 +118,24 @@ function BoardDetail() {
         taskId,
         task.title,
         "delete",
-        `تسک '${task.title}' حذف شد`,
+        `Task '${task.title}' was deleted`,
       );
       setTasks(tasks.filter((t) => t.id !== taskId));
-      toast.success("تسک با موفقیت حذف شد");
+      toast.success("Task deleted successfully");
     } catch (error) {
       console.error(error);
-      toast.error("خطا در حذف تسک");
+      toast.error("Error deleting task");
     }
   };
+
   const handleAddComment = async (taskId, newComment) => {
     try {
-      const task = tasks.find((t) => t.id === taskId);
-      await logActivity(
-        taskId,
-        task.title,
-        "comment",
-        `نظر جدید روی تسک '${task.title}' اضافه شد`,
-      );
+      const task = tasks.find((t) => String(t.id) === String(taskId));
+      if (!task) {
+        toast.error("Task not found");
+        return;
+      }
+
       const updatedComments = [...(task.comments || []), newComment];
 
       await fetch(`http://localhost:3001/tasks/${taskId}`, {
@@ -143,16 +146,26 @@ function BoardDetail() {
 
       setTasks(
         tasks.map((t) =>
-          t.id === taskId ? { ...t, comments: updatedComments } : t,
+          String(t.id) === String(taskId)
+            ? { ...t, comments: updatedComments }
+            : t,
         ),
       );
 
-      toast.success("نظر اضافه شد");
+      await logActivity(
+        taskId,
+        task.title,
+        "comment",
+        `New comment added to task '${task.title}'`,
+      );
+
+      toast.success("Comment added successfully");
     } catch (error) {
       console.error(error);
-      toast.error("خطا در اضافه کردن نظر");
+      toast.error("Error adding comment");
     }
   };
+
   const handleDragEnd = async (event) => {
     const { active, over } = event;
 
@@ -184,14 +197,14 @@ function BoardDetail() {
         response.id,
         response.title,
         "create",
-        `تسک '${response.title}' ایجاد شد`,
+        `Task '${response.title}' was created`,
       );
       setTasks([...tasks, response]);
       setIsModalOpen(false);
-      toast.success("تسک جدید اضافه شد");
+      toast.success("New task added successfully");
     } catch (error) {
       console.error("Error adding task:", error);
-      toast.error("خطا در اضافه کردن تسک");
+      toast.error("Error adding task");
     }
   };
 
@@ -202,6 +215,7 @@ function BoardDetail() {
       task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (task.description &&
         task.description.toLowerCase().includes(searchTerm.toLowerCase()));
+
     const matchesTag =
       selectedTag === "all" || (task.tags && task.tags.includes(selectedTag));
 
@@ -212,6 +226,7 @@ function BoardDetail() {
       filterStatus === "all" || task.status === filterStatus;
 
     let matchesDueDate = true;
+
     if (filterDueDate !== "all") {
       if (filterDueDate === "no-date") {
         matchesDueDate = !task.dueDate;
@@ -249,11 +264,12 @@ function BoardDetail() {
         setTasks(tasksData);
       } catch (error) {
         console.error(error);
-        toast.error("خطا در دریافت اطلاعات: " + error.message);
+        toast.error("Error fetching data: " + error.message);
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
   }, [id]);
 
@@ -280,6 +296,7 @@ function BoardDetail() {
           <h1 className="text-xl font-bold text-zinc-900 sm:text-2xl">
             {board?.name}
           </h1>
+
           <Button onClick={() => setIsModalOpen(true)}>Add Task</Button>
         </div>
 
@@ -367,6 +384,7 @@ function BoardDetail() {
             onDelete={handleDeleteTask}
             onAddComment={handleAddComment}
           />
+
           <TaskColumn
             id="in-progress"
             title="⚡ In Progress"
@@ -376,6 +394,7 @@ function BoardDetail() {
             onDelete={handleDeleteTask}
             onAddComment={handleAddComment}
           />
+
           <TaskColumn
             id="done"
             title="✅ Done"

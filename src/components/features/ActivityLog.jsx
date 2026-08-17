@@ -76,9 +76,7 @@ function ActivityLog({ activities }) {
             </span>
             <div className="min-w-0 flex-1">
               <p className="text-sm text-zinc-800 sm:text-base">
-                <span className="font-semibold">
-                  {activity.user || "کاربر"}
-                </span>{" "}
+                <span className="font-semibold">{activity.user || "user"}</span>{" "}
                 {activity.details}
               </p>
               <div className="mt-2 flex flex-wrap items-center justify-between gap-2">

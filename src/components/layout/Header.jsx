@@ -4,7 +4,7 @@ import Button from "../ui/Button";
 
 export default function Header({ onMenuClick }) {
   const navigate = useNavigate();
-  const userName = localStorage.getItem("userName") || "کاربر";
+  const userName = localStorage.getItem("userName") || "user";
 
   function handleLogout() {
     localStorage.removeItem("token");
@@ -43,7 +43,9 @@ export default function Header({ onMenuClick }) {
             {userName.charAt(0).toUpperCase()}
           </div>
           {/* Hide name on very small screens */}
-          <span className="hidden text-sm text-zinc-700 sm:inline">{userName}</span>
+          <span className="hidden text-sm text-zinc-700 sm:inline">
+            {userName}
+          </span>
         </Link>
 
         <Button

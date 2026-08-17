@@ -10,7 +10,7 @@ function Login() {
     if (data.Email === "test@gmail.com" && data.Password === "123456") {
       localStorage.setItem("token", "fake-token");
       localStorage.setItem("userEmail", data.Email);
-      localStorage.setItem("userName", "کاربر");
+      localStorage.setItem("userName", "user");
       window.location.href = "/dashboard";
     }
   };
@@ -24,7 +24,9 @@ function Login() {
             <LayoutDashboard size={28} />
           </div>
           <h1 className="text-2xl font-bold text-zinc-900">TaskFlow</h1>
-          <p className="mt-1 text-sm text-muted">Sign in to manage your tasks</p>
+          <p className="mt-1 text-sm text-muted">
+            Sign in to manage your tasks
+          </p>
         </div>
 
         {/* Login form card */}

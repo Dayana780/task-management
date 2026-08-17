@@ -2,54 +2,101 @@
   "boards": [
     {
       "id": "1",
-      "name": "پروژه React",
+      "name": "React Project",
       "color": "blue"
     },
     {
       "id": "2",
-      "name": "یادگیری Next.js",
+      "name": "Next.js Learning",
       "color": "green"
     },
     {
       "id": "3",
-      "name": "بهبود مهارت CSS",
+      "name": "CSS Skills Improvement",
       "color": "purple"
+    },
+    {
+      "name": "s",
+      "color": "red",
+      "id": "KAHpV-NIjNk"
     }
   ],
   "tasks": [
     {
       "id": "1",
-      "title": "نمونه تسک",
-      "description": "این یک تسک نمونه است",
+      "title": "Build Task Management Dashboard",
+      "description": "Create the main dashboard layout and task management interface.",
       "status": "todo",
       "boardId": "1",
-      "priority": "medium",
+      "priority": "high",
       "dueDate": "",
-      "tags": [],
+      "tags": [
+        "feature",
+        "react"
+      ],
       "comments": []
     },
     {
       "id": "2",
-      "title": "پیاده‌سازی Drag & Drop",
-      "description": "اضافه کردن قابلیت کشیدن تسک‌ها بین ستون‌ها",
+      "title": "Implement Drag & Drop",
+      "description": "Add drag and drop functionality for moving tasks between columns.",
       "status": "in-progress",
       "boardId": "1",
       "priority": "high",
-      "dueDate": "2026-06-10",
-      "tags": ["feature", "react"],
+      "dueDate": "",
+      "tags": [
+        "feature",
+        "react"
+      ],
       "comments": []
     },
     {
       "id": "3",
-      "title": "طراحی رابط کاربری",
-      "description": "بهبود استایل و ریسپانسیو کردن",
+      "title": "Improve Responsive Design",
+      "description": "Improve the layout and responsiveness across different screen sizes.",
       "status": "todo",
       "boardId": "1",
       "priority": "medium",
-      "dueDate": "2026-06-15",
-      "tags": ["design"],
+      "dueDate": "",
+      "tags": [
+        "design",
+        "responsive"
+      ],
       "comments": []
+    },
+    {
+      "title": "sssssssss",
+      "description": "ssssss",
+      "status": "in-progress",
+      "boardId": 1,
+      "priority": "medium",
+      "dueDate": "2026-08-17",
+      "tags": [
+        "feature",
+        "job"
+      ],
+      "id": "Hcx-tBocBRU"
     }
   ],
-  "activities": []
+  "activities": [
+    {
+      "taskId": "Hcx-tBocBRU",
+      "taskTitle": "sssssssss",
+      "action": "create",
+      "details": "Task 'sssssssss' was created",
+      "user": "User",
+      "createdAt": "2026-08-17T19:39:00.250Z",
+      "id": "ySgXiGis6SU"
+    },
+    {
+      "taskId": "Hcx-tBocBRU",
+      "taskTitle": "sssssssss",
+      "action": "status_change",
+      "details": "Task 'sssssssss' status changed from Done to In Progress",
+      "user": "User",
+      "createdAt": "2026-08-17T19:39:05.947Z",
+      "id": "WI1wRkbiiFc"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

@@ -24,7 +24,7 @@ function ProfilePage() {
 
   useEffect(() => {
     const email = localStorage.getItem("userEmail") || "test@gmail.com";
-    const name = localStorage.getItem("userName") || "کاربر";
+    const name = localStorage.getItem("userName") || "user";
     setUser({ email, name });
 
     const fetchStats = async () => {
@@ -38,7 +38,7 @@ function ProfilePage() {
 
         const commentsCount = tasks.reduce((total, task) => {
           const userComments =
-            task.comments?.filter((c) => c.author === "کاربر") || [];
+            task.comments?.filter((c) => c.author === "user") || [];
           return total + userComments.length;
         }, 0);
 
@@ -127,7 +127,9 @@ function ProfilePage() {
         {/* Stats grid */}
         <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
           <div className="rounded-xl bg-blue-50 p-4 text-center">
-            <div className="text-2xl font-bold text-primary">{stats.boards}</div>
+            <div className="text-2xl font-bold text-primary">
+              {stats.boards}
+            </div>
             <div className="text-sm text-muted">Boards</div>
           </div>
           <div className="rounded-xl bg-green-50 p-4 text-center">

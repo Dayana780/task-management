@@ -1,7 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import dayjs from "dayjs";
 import { CSS } from "@dnd-kit/utilities";
-import { Trash2 } from "lucide-react";
+import { GripVertical, Trash2 } from "lucide-react";
 import Button from "../ui/Button";
 import CommentSection from "./CommentSection";
 
@@ -21,17 +21,21 @@ function TaskCard({ task, onStatusChange, onDelete, onAddComment }) {
     opacity: isDragging ? 0.5 : 1,
   };
 
-  function handleDelete() {
+  // Stop drag from stealing clicks on buttons/inputs
+  const stopDrag = (e) => e.stopPropagation();
+
+  function handleDelete(e) {
+    e.stopPropagation();
     if (window.confirm("Delete this task?")) {
       onDelete(task.id);
     }
   }
 
-  const handleAddComment = async (commentText) => {
+  const handleAddComment = (commentText) => {
     const newComment = {
       id: Date.now().toString(),
       text: commentText,
-      author: "کاربر",
+      author: "user",
       createdAt: new Date().toISOString(),
     };
     onAddComment(task.id, newComment);
@@ -104,17 +108,25 @@ function TaskCard({ task, onStatusChange, onDelete, onAddComment }) {
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...listeners}
-      className="cursor-grab rounded-xl border border-border bg-card p-3 shadow-sm transition hover:shadow-md active:cursor-grabbing sm:p-4"
+      className="rounded-xl border border-border bg-card p-3 shadow-sm transition hover:shadow-md sm:p-4"
     >
-      <h3 className="font-medium text-zinc-900">{task.title}</h3>
+      {/* Drag handle — only this area triggers drag */}
+      <div
+        {...listeners}
+        className="flex cursor-grab items-start gap-2 active:cursor-grabbing"
+      >
+        <GripVertical size={16} className="mt-0.5 shrink-0 text-muted" />
+        <h3 className="flex-1 font-medium text-zinc-900">{task.title}</h3>
+      </div>
 
       {task.description && (
-        <p className="mt-1 text-sm text-muted line-clamp-2">{task.description}</p>
+        <p className="mt-1 pl-6 text-sm text-muted line-clamp-2">
+          {task.description}
+        </p>
       )}
 
       {/* Priority & due date row */}
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 pl-6">
         <span
           className={`rounded-full px-2 py-0.5 text-xs font-medium ${getPriorityColor(task.priority)}`}
         >
@@ -132,7 +144,7 @@ function TaskCard({ task, onStatusChange, onDelete, onAddComment }) {
 
       {/* Tags */}
       {task.tags && task.tags.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-1">
+        <div className="mt-2 flex flex-wrap gap-1 pl-6">
           {task.tags.map((tag) => (
             <span
               key={tag}
@@ -144,31 +156,36 @@ function TaskCard({ task, onStatusChange, onDelete, onAddComment }) {
         </div>
       )}
 
-      {/* Status dropdown */}
-      <select
-        value={task.status}
-        onChange={(e) => onStatusChange(task.id, e.target.value)}
-        className="mt-3 w-full rounded-lg border border-border px-2 py-1.5 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-        onClick={(e) => e.stopPropagation()}
+      {/* Interactive controls — isolated from drag */}
+      <div
+        className="mt-3 space-y-2 pl-6"
+        onPointerDown={stopDrag}
+        onClick={stopDrag}
       >
-        <option value="todo">📋 To Do</option>
-        <option value="in-progress">⚡ In Progress</option>
-        <option value="done">✅ Done</option>
-      </select>
+        <select
+          value={task.status}
+          onChange={(e) => onStatusChange(task.id, e.target.value)}
+          className="w-full rounded-lg border border-border px-2 py-1.5 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+        >
+          <option value="todo">📋 To Do</option>
+          <option value="in-progress">⚡ In Progress</option>
+          <option value="done">✅ Done</option>
+        </select>
 
-      <Button
-        onClick={handleDelete}
-        variant="danger"
-        className="mt-2 flex w-full items-center justify-center gap-1 py-1.5 text-xs sm:text-sm"
-      >
-        <Trash2 size={14} />
-        Delete
-      </Button>
+        <Button
+          onClick={handleDelete}
+          variant="danger"
+          className="flex w-full items-center justify-center gap-1 py-1.5 text-xs sm:text-sm"
+        >
+          <Trash2 size={14} />
+          Delete
+        </Button>
 
-      <CommentSection
-        comments={task.comments || []}
-        onAddComment={handleAddComment}
-      />
+        <CommentSection
+          comments={task.comments || []}
+          onAddComment={handleAddComment}
+        />
+      </div>
     </div>
   );
 }

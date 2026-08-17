@@ -11,6 +11,7 @@ function CommentSection({ comments, onAddComment }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     if (newComment.trim() !== "") {
       onAddComment(newComment.trim());
       setNewComment("");
@@ -18,7 +19,10 @@ function CommentSection({ comments, onAddComment }) {
   };
 
   return (
-    <div className="mt-3 border-t border-border pt-3">
+    <div
+      className="mt-3 border-t border-border pt-3"
+      onPointerDown={(e) => e.stopPropagation()}
+    >
       <h4 className="mb-2 text-sm font-medium text-zinc-700">
         💬 Comments ({comments.length})
       </h4>
