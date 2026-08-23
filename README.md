@@ -1,36 +1,80 @@
 # TaskFlow — Task Management App
 
-A responsive Kanban-style task management app built with React. Create boards, organize tasks with drag & drop, filter by priority/tags, and track activity history.
+A modern, responsive Kanban-style task management application built with **React**.
 
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38B2AC?logo=tailwindcss&logoColor=white)
+TaskFlow allows users to create and manage boards, organize tasks with drag & drop, filter and search tasks, add comments, and track activity history through a clean and responsive interface.
 
-## Features
+## ✨ Features
 
-- **Boards** — Create and manage multiple task boards
-- **Kanban columns** — To Do, In Progress, Done
-- **Drag & drop** — Move tasks between columns with `@dnd-kit`
-- **Filters** — Search, priority, status, tags, and due date
-- **Comments** — Add comments on each task
-- **Activity log** — Track create, update, delete, and comment events
-- **User profile** — View stats and edit display name
-- **Responsive UI** — Mobile sidebar, adaptive grids, and touch-friendly layout
+- **Boards** — Create, update, and delete multiple task boards
+- **Kanban Workflow** — Organize tasks across To Do, In Progress, and Done columns
+- **Drag & Drop** — Move tasks between columns using `@dnd-kit`
+- **Task Management** — Create, update, and delete tasks
+- **Advanced Filtering** — Search and filter by priority, status, tags, and due date
+- **Task Comments** — Add comments to individual tasks
+- **Activity History** — Track task creation, updates, status changes, deletions, and comments
+- **User Profile** — View task statistics and update the display name
+- **Authentication Demo** — Simulated login using `localStorage`
+- **Responsive Design** — Optimized for desktop, tablet, and mobile screens
+- **Toast Notifications** — User-friendly feedback for actions and errors
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-| Category | Tools |
-|----------|-------|
-| Frontend | React 19, React Router, Vite |
-| Styling | Tailwind CSS, Lucide Icons |
-| Forms | React Hook Form |
-| Drag & Drop | @dnd-kit |
-| HTTP | Axios |
-| Notifications | React Hot Toast |
-| Dates | Day.js |
-| Mock API | JSON Server |
+| Category         | Technologies                 |
+| ---------------- | ---------------------------- |
+| Frontend         | React 19, React Router, Vite |
+| Styling          | Tailwind CSS 3               |
+| Icons            | Lucide React                 |
+| Forms            | React Hook Form              |
+| Drag & Drop      | @dnd-kit                     |
+| HTTP Client      | Axios                        |
+| State Management | Zustand                      |
+| Validation       | Zod                          |
+| Notifications    | React Hot Toast, Sonner      |
+| Date Handling    | Day.js, date-fns             |
+| Mock Backend     | JSON Server                  |
 
-## Getting Started
+## 📂 Project Structure
+
+```text
+src/
+├── components/
+│   ├── features/
+│   │   ├── TaskCard
+│   │   ├── TaskColumn
+│   │   ├── ActivityLog
+│   │   └── CommentSection
+│   │
+│   ├── layout/
+│   │   ├── Layout
+│   │   ├── Sidebar
+│   │   ├── Header
+│   │   └── ProtectedRoute
+│   │
+│   └── ui/
+│       ├── Button
+│       ├── Modal
+│       └── AddTaskModal
+│
+├── pages/
+│   ├── Login
+│   ├── Dashboard
+│   ├── BoardDetail
+│   ├── Profile
+│   └── Activity
+│
+├── services/
+│   ├── api
+│   ├── boards
+│   └── tasks
+│
+├── App.jsx
+└── main.jsx
+
+db.json
+```
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -39,75 +83,172 @@ A responsive Kanban-style task management app built with React. Create boards, o
 
 ### Installation
 
-```bash
-# Clone the repo
-git clone https://github.com/YOUR_USERNAME/task-management.git
-cd task-management
+Clone the repository:
 
-# Install dependencies
+```bash
+git clone https://github.com/Dayana780/task-management.git
+```
+
+Navigate to the project:
+
+```bash
+cd task-management
+```
+
+Install dependencies:
+
+```bash
 npm install
 ```
 
-### Run locally
+### Run Locally
 
-You need **two terminals** — one for the mock API and one for the frontend.
+TaskFlow currently uses **JSON Server** as a mock backend, so you need two terminals.
+
+**Terminal 1 — Start the mock API:**
 
 ```bash
-# Terminal 1 — mock backend (port 3001)
 npm run server
+```
 
-# Terminal 2 — frontend (port 5173)
+The API will run on:
+
+```text
+http://localhost:3001
+```
+
+**Terminal 2 — Start the React application:**
+
+```bash
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+The application will run on:
 
-### Demo login
-
-| Field | Value |
-|-------|-------|
-| Email | `test@gmail.com` |
-| Password | `123456` |
-
-## Available Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run server` | Start JSON Server mock API |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
-
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── features/     # TaskCard, TaskColumn, ActivityLog, CommentSection
-│   ├── layout/       # Layout, Sidebar, Header, ProtectedRoute
-│   └── ui/           # Button, Modal, AddTaskModal
-├── pages/            # Login, Dashboard, BoardDetail, Profile, Activity
-├── services/         # API calls (boards, tasks)
-├── App.jsx           # Routes
-└── main.jsx          # Entry point
+```text
+http://localhost:5173
 ```
 
-## Screenshots
+Open the local URL in your browser.
 
-> Add screenshots here before publishing to GitHub.
+## 🔐 Demo Login
 
-<!-- Example:
+TaskFlow currently uses simulated authentication for demonstration purposes.
+
+| Field    | Value            |
+| -------- | ---------------- |
+| Email    | `test@gmail.com` |
+| Password | `123456`         |
+
+> This authentication system is intended for demonstration purposes only and is not a production authentication system.
+
+## 📜 Available Scripts
+
+| Command           | Description                       |
+| ----------------- | --------------------------------- |
+| `npm run dev`     | Start the Vite development server |
+| `npm run server`  | Start the JSON Server mock API    |
+| `npm run build`   | Create a production build         |
+| `npm run preview` | Preview the production build      |
+| `npm run lint`    | Run ESLint                        |
+
+## 🖼️ Screenshots
+
+Screenshots of the main application interface will be added here.
+
+Recommended screenshots:
+
+- Dashboard
+- Board detail / Kanban view
+- Task modal
+- Activity history
+- Profile
+
+Example:
+
+```md
 ![Dashboard](./screenshots/dashboard.png)
+
 ![Board](./screenshots/board.png)
--->
 
-## Notes
+![Task Modal](./screenshots/task-modal.png)
+```
 
-- Authentication is simulated with `localStorage` (demo only).
-- Data is stored in `db.json` and served by JSON Server.
-- API base URL: `http://localhost:3001`
+## 🔌 API & Data
 
-## License
+TaskFlow currently uses **JSON Server** as a lightweight mock REST API.
 
-This project is open source and available for portfolio use.
+Application data is stored in:
+
+```text
+db.json
+```
+
+The frontend communicates with the API through Axios.
+
+Local API base URL:
+
+```text
+http://localhost:3001
+```
+
+Available resources include:
+
+```text
+/boards
+/tasks
+/activities
+```
+
+## 🔒 Authentication
+
+Authentication is currently simulated on the frontend using `localStorage`.
+
+After successful demo login, a temporary token is stored locally and the user is redirected to the dashboard.
+
+This implementation is intentionally lightweight because the project is designed as a **frontend portfolio project** rather than a production authentication system.
+
+## 📱 Responsive Design
+
+The interface is designed to work across different screen sizes, including:
+
+- Desktop
+- Laptop
+- Tablet
+- Mobile
+
+The application includes an adaptive sidebar, responsive task layouts, and touch-friendly interactions.
+
+## 🎯 Project Goals
+
+This project was built to demonstrate practical frontend development skills including:
+
+- Building reusable React components
+- Managing application state
+- Working with REST APIs
+- Implementing drag & drop interactions
+- Form handling and validation
+- Responsive UI development
+- Client-side routing
+- Authentication flow concepts
+- CRUD operations
+- Creating a structured and maintainable React application
+
+## 📌 Current Status
+
+**Frontend:** Complete
+**Mock API:** JSON Server
+**Authentication:** Demo / simulated
+**Production Backend:** Not implemented
+
+The current version is intended as a portfolio demonstration project.
+
+## 📄 License
+
+This project is open source and available for portfolio and educational use.
+
+---
+
+Built with ❤️ using **React, Vite, and Tailwind CSS**.
+
+**Dayana Ehsanian**

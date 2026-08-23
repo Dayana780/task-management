@@ -18,14 +18,14 @@ function Sidebar({ isOpen, onClose }) {
       <div className="flex items-center justify-between border-b border-zinc-800 p-4">
         <div className="flex items-center gap-3">
           <img
-            className="h-12 w-12 rounded-full border-2 border-primary object-cover"
-            src="patrik.jpg"
+            className=" w-full rounded-full border-2 border-none object-cover"
+            src="../../../public/taskflow_logo.png"
             alt="Profile"
           />
-          <div>
+          {/* <div>
             <p className="text-sm font-semibold">TaskFlow</p>
             <p className="text-xs text-zinc-400">Task Manager</p>
-          </div>
+          </div> */}
         </div>
         {/* Close button — mobile only */}
         <button

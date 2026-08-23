@@ -96,6 +96,33 @@
       "user": "User",
       "createdAt": "2026-08-17T19:39:05.947Z",
       "id": "WI1wRkbiiFc"
+    },
+    {
+      "taskId": "d29445c7-6ca1-4db2-a2fe-24cc09be2e75",
+      "taskTitle": "dsvgd",
+      "action": "create",
+      "details": "Task 'dsvgd' was created",
+      "user": "User",
+      "createdAt": "2026-08-23T21:37:25.893Z",
+      "id": "WSBWBOl4GWE"
+    },
+    {
+      "taskId": "d29445c7-6ca1-4db2-a2fe-24cc09be2e75",
+      "taskTitle": "dsvgd",
+      "action": "status_change",
+      "details": "Task 'dsvgd' status changed from To Do to In Progress",
+      "user": "User",
+      "createdAt": "2026-08-23T21:37:28.944Z",
+      "id": "Q21zPZhzfMk"
+    },
+    {
+      "taskId": "d29445c7-6ca1-4db2-a2fe-24cc09be2e75",
+      "taskTitle": "dsvgd",
+      "action": "comment",
+      "details": "New comment added to task 'dsvgd'",
+      "user": "User",
+      "createdAt": "2026-08-23T21:37:31.493Z",
+      "id": "KjxrkmtOmyg"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
