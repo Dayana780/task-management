@@ -6,15 +6,12 @@ function Login() {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (data) => {
-    // Demo login — test@gmail.com / 123456
-    if (data.Email === "test@gmail.com" && data.Password === "123456") {
-      localStorage.setItem("token", "fake-token");
-      localStorage.setItem("userEmail", data.Email);
-      localStorage.setItem("userName", "user");
-      window.location.href = "/dashboard";
-    }
-  };
+    localStorage.setItem("token", "demo-token");
+    localStorage.setItem("userEmail", data.Email);
+    localStorage.setItem("userName", data.Email.split("@")[0]);
 
+    window.location.href = "/dashboard";
+  };
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-surface to-zinc-100 px-4">
       <div className="w-full max-w-md">
@@ -65,7 +62,7 @@ function Login() {
           </Button>
 
           <p className="mt-4 text-center text-xs text-muted">
-            Demo: test@gmail.com / 123456
+            Demo project — enter any email and password to continue.
           </p>
         </form>
       </div>
