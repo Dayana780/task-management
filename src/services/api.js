@@ -95,6 +95,27 @@ const api = {
         ),
       };
     }
+    if (url === "/tasks") {
+      return { data: data.tasks };
+    }
+
+    if (url === "/activities") {
+      return { data: data.activities };
+    }
+
+    if (url.startsWith("/boards/")) {
+      const boardId = url.split("/")[2];
+
+      const board = data.boards.find(
+        (board) => String(board.id) === String(boardId),
+      );
+
+      if (!board) {
+        throw new Error("Board not found");
+      }
+
+      return { data: board };
+    }
 
     throw new Error(`GET endpoint not found: ${url}`);
   },
@@ -113,7 +134,17 @@ const api = {
 
       return { data: newBoard };
     }
+    if (url === "/activities") {
+      const newActivity = {
+        ...body,
+        id: body.id || generateId(),
+      };
 
+      data.activities.push(newActivity);
+      saveData(data);
+
+      return { data: newActivity };
+    }
     if (url === "/tasks") {
       const newTask = {
         ...body,

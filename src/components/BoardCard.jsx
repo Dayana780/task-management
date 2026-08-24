@@ -31,7 +31,12 @@ function BoardCard({ board }) {
           </div>
 
           <div className="mt-3 flex items-center justify-between">
-            <span className="text-xs text-muted">Board #{board.id}</span>
+            <span className="text-xs text-muted">
+              Board #
+              {String(board.id).length > 8
+                ? String(board.id).slice(0, 8)
+                : board.id}
+            </span>
             <span
               className={`rounded-full px-2.5 py-0.5 text-xs font-medium capitalize text-white ${accentColor}`}
             >

@@ -19,7 +19,7 @@ import {
 import Button from "../components/ui/Button";
 import AddTaskModal from "../components/ui/AddTaskModal";
 import TaskColumn from "../components/features/TaskColumn";
-
+import api from "../services/api";
 function BoardDetail() {
   const { id } = useParams();
 
@@ -39,24 +39,16 @@ function BoardDetail() {
   const logActivity = async (taskId, taskTitle, action, details) => {
     console.log("📝 Logging activity:", { taskId, taskTitle, action });
     try {
-      const response = await fetch("http://localhost:3001/activities", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          taskId: taskId || null,
-          taskTitle,
-          action,
-          details,
-          user: "User",
-          createdAt: new Date().toISOString(),
-        }),
+      await api.post("/activities", {
+        taskId: taskId || null,
+        taskTitle,
+        action,
+        details,
+        user: "User",
+        createdAt: new Date().toISOString(),
       });
 
-      if (response.ok) {
-        console.log("✅ Activity logged successfully");
-      } else {
-        console.error("❌ Failed to log activity:", response.status);
-      }
+      console.log("✅ Activity logged successfully");
     } catch (error) {
       console.error("❌ Error logging activity:", error);
     }
@@ -138,10 +130,8 @@ function BoardDetail() {
 
       const updatedComments = [...(task.comments || []), newComment];
 
-      await fetch(`http://localhost:3001/tasks/${taskId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ comments: updatedComments }),
+      await api.patch(`/tasks/${taskId}`, {
+        comments: updatedComments,
       });
 
       setTasks(
@@ -256,10 +246,8 @@ function BoardDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const boardResponse = await fetch(`http://localhost:3001/boards/${id}`);
-        const boardData = await boardResponse.json();
-        setBoard(boardData);
-
+        const boardResponse = await api.get(`/boards/${id}`);
+        setBoard(boardResponse.data);
         const tasksData = await fetchTasksByBoard(id);
         setTasks(tasksData);
       } catch (error) {

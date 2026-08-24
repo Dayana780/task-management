@@ -1,16 +1,20 @@
 import { useState, useEffect } from "react";
 import { History } from "lucide-react";
 import ActivityLog from "../components/features/ActivityLog";
-
+import api from "../services/api";
 function ActivityPage() {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/activities")
-      .then((res) => res.json())
-      .then((data) => {
-        setActivities(data);
+    api
+      .get("/activities")
+      .then((res) => {
+        setActivities(res.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching activities:", error);
         setLoading(false);
       });
   }, []);

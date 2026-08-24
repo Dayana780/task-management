@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { User, Pencil } from "lucide-react";
 import Button from "../components/ui/Button";
-
+import api from "../services/api";
 function ProfilePage() {
   const [user, setUser] = useState({ email: "", name: "" });
   const [loading, setLoading] = useState(true);
@@ -30,12 +30,12 @@ function ProfilePage() {
     const fetchStats = async () => {
       try {
         const [boardsRes, tasksRes] = await Promise.all([
-          fetch("http://localhost:3001/boards"),
-          fetch("http://localhost:3001/tasks"),
+          api.get("/boards"),
+          api.get("/tasks"),
         ]);
-        const boards = await boardsRes.json();
-        const tasks = await tasksRes.json();
 
+        const boards = boardsRes.data;
+        const tasks = tasksRes.data;
         const commentsCount = tasks.reduce((total, task) => {
           const userComments =
             task.comments?.filter((c) => c.author === "user") || [];
