@@ -37,7 +37,6 @@ function BoardDetail() {
   const [selectedTag, setSelectedTag] = useState("all");
 
   const logActivity = async (taskId, taskTitle, action, details) => {
-    console.log("📝 Logging activity:", { taskId, taskTitle, action });
     try {
       await api.post("/activities", {
         taskId: taskId || null,
@@ -47,10 +46,8 @@ function BoardDetail() {
         user: "User",
         createdAt: new Date().toISOString(),
       });
-
-      console.log("✅ Activity logged successfully");
     } catch (error) {
-      console.error("❌ Error logging activity:", error);
+      toast.error("❌ Error logging activity:", error);
     }
   };
 
@@ -97,7 +94,6 @@ function BoardDetail() {
       );
       toast.success("Task status changed successfully", { id: toastId });
     } catch (error) {
-      console.error("Error updating status:", error);
       toast.error("Error changing task status", { id: toastId });
     }
   };
@@ -115,7 +111,6 @@ function BoardDetail() {
       setTasks(tasks.filter((t) => t.id !== taskId));
       toast.success("Task deleted successfully");
     } catch (error) {
-      console.error(error);
       toast.error("Error deleting task");
     }
   };
@@ -151,7 +146,6 @@ function BoardDetail() {
 
       toast.success("Comment added successfully");
     } catch (error) {
-      console.error(error);
       toast.error("Error adding comment");
     }
   };
@@ -193,7 +187,6 @@ function BoardDetail() {
       setIsModalOpen(false);
       toast.success("New task added successfully");
     } catch (error) {
-      console.error("Error adding task:", error);
       toast.error("Error adding task");
     }
   };
@@ -251,7 +244,6 @@ function BoardDetail() {
         const tasksData = await fetchTasksByBoard(id);
         setTasks(tasksData);
       } catch (error) {
-        console.error(error);
         toast.error("Error fetching data: " + error.message);
       } finally {
         setLoading(false);

@@ -14,7 +14,6 @@ function ActivityPage() {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching activities:", error);
         setLoading(false);
       });
   }, []);

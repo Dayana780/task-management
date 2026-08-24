@@ -4,6 +4,7 @@ import { fetchBoards, createBoard } from "../services/boardService";
 import BoardCard from "../components/BoardCard";
 import Button from "../components/ui/Button";
 import Modal from "../components/ui/Modal";
+import toast from "react-hot-toast";
 
 export default function Dashboard() {
   const [boards, setBoards] = useState([]);
@@ -16,7 +17,7 @@ export default function Dashboard() {
         const data = await fetchBoards();
         setBoards(data);
       } catch (error) {
-        console.error("Error fetching boards:", error);
+        toast.error("Error fetching boards:", error);
       } finally {
         setLoading(false);
       }
@@ -31,8 +32,7 @@ export default function Dashboard() {
       setBoards(updatedBoards);
       setIsModalOpen(false);
     } catch (error) {
-      console.error("Error creating board:", error);
-      alert("Failed to create board");
+      toast.error("Failed to create board");
     }
   };
 

@@ -48,7 +48,7 @@ function ProfilePage() {
           comments: commentsCount,
         });
       } catch (error) {
-        console.error("Error fetching stats:", error);
+        toast.error("Error fetching stats:", error);
       }
     };
 

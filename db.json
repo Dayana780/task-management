@@ -123,6 +123,33 @@
       "user": "User",
       "createdAt": "2026-08-23T21:37:31.493Z",
       "id": "KjxrkmtOmyg"
+    },
+    {
+      "taskId": "e065b7c9-3fb3-461e-9c7b-02a41fa78a66",
+      "taskTitle": "dedline",
+      "action": "create",
+      "details": "Task 'dedline' was created",
+      "user": "User",
+      "createdAt": "2026-08-23T21:59:45.411Z",
+      "id": "wQhz7atoZhs"
+    },
+    {
+      "taskId": "39c1291d-e116-4349-9955-07a2eb5dcdf8",
+      "taskTitle": "create new feature",
+      "action": "create",
+      "details": "Task 'create new feature' was created",
+      "user": "User",
+      "createdAt": "2026-08-23T22:00:57.971Z",
+      "id": "ksuuhWGBR-k"
+    },
+    {
+      "taskId": "f22181c3-3278-47ae-bd3a-3e7e8a1ebef4",
+      "taskTitle": "Create New Task",
+      "action": "create",
+      "details": "Task 'Create New Task' was created",
+      "user": "User",
+      "createdAt": "2026-08-23T22:08:02.844Z",
+      "id": "9_eYBtWTVY8"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
